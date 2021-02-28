@@ -1,0 +1,34 @@
+.ControlPanel{
+	display: flex;
+	flex-flow:  row wrap ;
+	padding: 1rem;
+	background-color: white;
+
+	.NewGame{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 1rem;
+    padding: 0.5rem;
+    background: #8f7a66;
+    color: white;
+    border-radius: 3px;
+    font-weight: bold;
+	}
+
+	.GameStatistics{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: 1rem;
+    padding: 0.5rem;
+    background: #8f7a66;
+    color: white;
+    border-radius: 3px;
+    font-weight: bold;
+	}
+}

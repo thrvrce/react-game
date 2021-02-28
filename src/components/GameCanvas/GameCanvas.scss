@@ -1,0 +1,28 @@
+.GameCanvas{
+	display: flex;
+	flex-flow: row wrap;
+	width: 40rem;
+  height: 40rem;
+
+	background-color: #bbada0;
+	border-radius: 6px;
+
+	&-CellWrapper{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&-Cell{
+		display: flex;
+    justify-content: center;
+    align-items: center;
+		width: 85%;
+		height: 85%;
+		border-radius: 3px;
+		color: #776e65;
+		font-weight: bold;
+		font-size: 2rem;
+	}
+
+}

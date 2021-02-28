@@ -1,0 +1,44 @@
+.GameCanvas {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  width: 40rem;
+  height: 40rem;
+  background-color: #bbada0;
+  border-radius: 6px;
+}
+
+.GameCanvas-CellWrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.GameCanvas-Cell {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 85%;
+  height: 85%;
+  border-radius: 3px;
+  color: #776e65;
+  font-weight: bold;
+  font-size: 2rem;
+}
+/*# sourceMappingURL=GameCanvas.css.map */
