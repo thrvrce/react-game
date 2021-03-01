@@ -1,11 +1,15 @@
 import React from 'react'
 import './ControlPanel.css'
 
-export default function ControlPanel() {
+interface ControlPAnel {
+	newGameHAndler: Function,
+}
+
+export default function ControlPanel({newGameHAndler}: ControlPAnel) {
 	return(
 		<div className='ControlPanel'>
 			{/* <div>Nickname or login\authorization</div> */}
-			<div className='NewGame'> New Game</div>
+			<input type='button' value='New Game' className='NewGame button' onClick={() => newGameHAndler()}></input>
 			<div className='GameStatistics'> Game Statistics</div>
 		</div>
 	)

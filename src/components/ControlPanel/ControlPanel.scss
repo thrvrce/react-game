@@ -4,6 +4,10 @@
 	padding: 1rem;
 	background-color: white;
 
+	.button:hover{
+		cursor: pointer;
+		opacity: 0.7;
+	}
 	.NewGame{
     display: flex;
     flex-flow: column nowrap;

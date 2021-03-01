@@ -69,11 +69,17 @@ function generateNewGame(fieldSize : number = 4): gameCell[]{
 
 
 export default function GameField() {
+	const [gameCells, setGameCells] = React.useState(generateNewGame())
+
+	function newGameHAndler() {
+		setGameCells(generateNewGame());
+	}
+
 	return (
 		<div className='GameField'>
-			<ControlPanel/>
+			<ControlPanel newGameHAndler={newGameHAndler}/>
 			<CurrentGameStatistics/>
-			<GameCanvas gameCells={generateNewGame()}/>
+			<GameCanvas gameCells={gameCells}/>
 		</div>
 	)
 }
