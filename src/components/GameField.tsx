@@ -179,23 +179,30 @@ export default function GameField() {
 
 	let [isCellAppearance, setisCellAppearance] = React.useState(true);
 	let [transitionDirection, settransitionDirection] = React.useState('');
+	let cancalculateCelsNewState = React.useRef(false);
 
 
 	const keyDownHandler = React.useCallback((e: KeyboardEvent)=>{
-		const cellTransitionDirection: string = getCellsTransitionDirection(e.key);
-		console.log(e.key)
-		if (Events.includes(cellTransitionDirection)) {
-			console.log(cellTransitionDirection)
-			const {isArrChanged, newArr } = calculateNewCellsState(gameCells, cellTransitionDirection);
-			if (isArrChanged) {
-				setGameCells([...newArr])
-				settransitionDirection(cellTransitionDirection);
-			} else {
-				setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)))
-				setisCellAppearance(true);
+		if(cancalculateCelsNewState.current) {
+			cancalculateCelsNewState.current = false;
+
+			const cellTransitionDirection: string = getCellsTransitionDirection(e.key);
+			console.log(e.key)
+
+			if (Events.includes(cellTransitionDirection)) {
+				// console.log(cellTransitionDirection)
+				const {isArrChanged, newArr } = calculateNewCellsState(gameCells, cellTransitionDirection);
+				if (isArrChanged) {
+					setGameCells([...newArr])
+					settransitionDirection(cellTransitionDirection);
+				} else {
+					setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)))
+					setisCellAppearance(true);
+				}
 			}
 		}
 	}, [gameCells])
+
 
 	React.useEffect(()=>{
 		window.addEventListener('keydown',keyDownHandler);
@@ -215,6 +222,7 @@ export default function GameField() {
 			cell.path = 0;
 			return cell;
 		}));
+		cancalculateCelsNewState.current = true;
 	}
 
 	function cellTransitionEndHandler (){
