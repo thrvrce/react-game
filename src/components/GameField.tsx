@@ -66,9 +66,10 @@ function generateNewGame(fieldSize : number = 4): gameCell[]{
 
 
 
-function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string) :{isArrChanged: boolean, newArr :gameCell[]}{
+function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string) :{isArrChanged: boolean, newArr :gameCell[], points: number}{
 	const newArr = gameCellsToChange;
 	let isArrChanged: boolean = false;
+	let points: number = 0;
 	const size = Math.sqrt(newArr.length);
 	let mainAxisStartIndex: number = 0;
 	let mainAxisOffset: number = 0;
@@ -144,6 +145,7 @@ function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string)
 							} else {
 								dstCell.curValue = dstCell.curValue * 2 ;
 								dstCell.isUpdatedOrNew = true;
+								points = +dstCell.curValue;
 							}
 
 							srcCell.curValue = null;
@@ -160,7 +162,7 @@ function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string)
 			}
 		}
 	}
-	return { isArrChanged, newArr };
+	return { isArrChanged, newArr, points };
 }
 
 function getCellsTransitionDirection(eventName: string): string {
@@ -175,6 +177,11 @@ function getCellsTransitionDirection(eventName: string): string {
 }
 
 export default function GameField() {
+	// const [gameTime, setgameTime] = React.useState(0)
+	// const [moves, setgameTime] = React.useState(0)
+	const [score, setscore] = React.useState(0);//todo from storage
+
+
 	const [gameCells, setGameCells] = React.useState(generateNewGame())
 
 	let [isCellAppearance, setisCellAppearance] = React.useState(true);
@@ -191,10 +198,11 @@ export default function GameField() {
 
 			if (Events.includes(cellTransitionDirection)) {
 				// console.log(cellTransitionDirection)
-				const {isArrChanged, newArr } = calculateNewCellsState(gameCells, cellTransitionDirection);
+				const {isArrChanged, newArr, points } = calculateNewCellsState(gameCells, cellTransitionDirection);
 				if (isArrChanged) {
 					setGameCells([...newArr])
 					settransitionDirection(cellTransitionDirection);
+					setscore( (curScore) => curScore + points);
 				} else {
 					setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)))
 					setisCellAppearance(true);
@@ -209,9 +217,15 @@ export default function GameField() {
 		return () =>  window.removeEventListener('keydown',keyDownHandler);
 	},[keyDownHandler])
 
+	// React.useEffect(()=>{
+	// 	const timeIncrementInterval = setInterval(()=> setgameTime((curTime)=> Math.floor(curTime + 1000)))
+	// 	return () =>  clearInterval(timeIncrementInterval);
+	// },[gameTime])
+
 	function newGameHAndler() {
 		setGameCells(generateNewGame());
 		setisCellAppearance(true)
+		setscore(0);
 	}
 
 	function cellAnimationEndHandler(){
@@ -235,7 +249,7 @@ export default function GameField() {
 	return (
 		<div className='GameField'>
 			<ControlPanel newGameHAndler={newGameHAndler}/>
-			<CurrentGameStatistics/>
+			<CurrentGameStatistics score={score}/>
 			<GameCanvas
 			gameCells={gameCells}
 			isCellAppearance={isCellAppearance}

@@ -80,7 +80,7 @@ export default function GameCanvas({gameCells, isCellAppearance, transitionDirec
 						background: calcBgColor(displayedValue),
 						animation: isCellAppearance && value.prevValue !== value.curValue && value.curValue && value.isUpdatedOrNew ? 'insertNewCells .3s linear' : '',
 						transform: isCellTransitioned ? `translate(${calcTranslateX(transitionDirection, value.path)}%, ${calcTranslateY(transitionDirection, value.path)}%)` : '',
-						transition: isCellTransitioned ? 'transform 2s' : '',
+						transition: isCellTransitioned ? 'transform .3s' : '',
 					}
 
 					return (
