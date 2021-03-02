@@ -1,6 +1,8 @@
 interface gameCell {
-	value: number | null,
-	color: string,
+	curValue: number | null,
+	prevValue: number | null,
+	isMerged: boolean,
+	path: number
 }
 
 export type {gameCell}

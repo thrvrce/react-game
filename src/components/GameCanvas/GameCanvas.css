@@ -55,10 +55,6 @@
   border-radius: 6px;
   font-weight: bold;
   font-size: 2rem;
-  -webkit-transition: -webkit-transform 1s;
-  transition: -webkit-transform 1s;
-  transition: transform 1s;
-  transition: transform 1s, -webkit-transform 1s;
 }
 
 @-webkit-keyframes insertNewCells {

@@ -1,62 +1,80 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import './GameCanvas.css'
 import {gameCell} from '../../Const/generallInterfaces'
-import { cellValueColorBelow8, cellValueColorMore8 } from "../../Const/generalConsts";
+import { cellValueColorBelow8, cellValueColorMore8, colorForEmty, colorFor2, colorFor4, colorFor8, colorFor16,	colorFor32,	colorFor64,	colorFor128, colorFor256,} from '../../Const/generalConsts'
 
-interface gameCells {gameCells: gameCell[], animateCellAppearance: boolean, animateCellTransition: boolean, animationEndHandler: Function};
+interface props {gameCells: gameCell[], isCellAppearance: boolean, isCellTransition: boolean, cellAnimationEndHandler: Function, cellTransitionEndHandler: Function};
 
-export default function GameCanvas({gameCells, animateCellAppearance, animateCellTransition, animationEndHandler}:gameCells) {
+function calcBgColor(value: number | null): string{
+	let result: string = '';
+	switch(value) {
+		case 2 : result = colorFor2; break;
+		case 4 : result = colorFor4; break;
+		case 8 : result = colorFor8; break;
+		case 16 : result = colorFor16; break;
+		case 32 : result = colorFor32; break;
+		case 64 : result = colorFor64; break;
+		case 128 : result = colorFor128; break;
+		case 256 : result = colorFor256; break;
+		default: result = colorForEmty; break;
+	}
+	return result;
+}
+export default function GameCanvas({gameCells, isCellAppearance, isCellTransition, cellAnimationEndHandler, cellTransitionEndHandler}:props) {
 	const widthHeight = `${100 / Math.sqrt(gameCells.length)}%`;
-	const [isTransitionEnd, set_isTransitionEnd] = React.useState(false);
 	const gameCanvas = React.useRef<HTMLDivElement>(null)
 	const handleAppearAnimation = React.useRef(false);
-	handleAppearAnimation.current = animateCellAppearance;
-	console.log('hi', animateCellAppearance, handleAppearAnimation.current)
-	// React.useEffect(()=>{
-	// 	handleAppearAnimation.current = animateCellAppearance;
-	// 	console.log(handleAppearAnimation.current);
-	// 	return () => {handleAppearAnimation.current = false; console.log(handleAppearAnimation.current) }
-	// })
+	const handleCellTransition = React.useRef(false);
 
-	// function TransitionEndHandler(e:TransitionEvent<>){
-	// 	if(isTransitionEnd) {
-	// 		console.log(e.target);
-	// 		set_isTransitionEnd(false);
-	// 	}
-	// }
-	function innerAnimationEndHandler(){
+	handleAppearAnimation.current = isCellAppearance;
+	handleCellTransition.current = isCellTransition;
+
+
+	function innerCellAnimationEndHandler(){
 		if (handleAppearAnimation.current) {
-			handleAppearAnimation.current = true;
-			animationEndHandler();
+			handleAppearAnimation.current = false;
+			cellAnimationEndHandler();
 			if (gameCanvas.current){
-				gameCanvas.current.removeEventListener('animationend', innerAnimationEndHandler);
+				gameCanvas.current.removeEventListener('animationend', innerCellAnimationEndHandler);
 			}
 		}
 	}
 
-//onTransitionEnd={TransitionEndHandler
-	return(
-		<div ref={gameCanvas} className='GameCanvas' onAnimationEnd={innerAnimationEndHandler} >
-			{gameCells.map((value: gameCell, index: number) =>
-				{
-					// const cellStyle: object = {
-					// 	background:
-					// }
+	function innercellTransitionEndHandler() {
+		if (handleCellTransition.current) {
+			handleCellTransition.current = false;
+			cellTransitionEndHandler();
+			if (gameCanvas.current){
+				gameCanvas.current.removeEventListener('transitionend', innercellTransitionEndHandler);
+			}
+		}
+	}
 
-					return <div ref={gameCanvas} key={index.toString()} className='GameCanvas-CellWrapper' style={{ width: widthHeight, height: widthHeight}} >
-									<div className='GameCanvas-CellBackground'>
-										<div
-											className='GameCanvas-Cell'
-											style={{ background: value.color, animation: animateCellAppearance? 'insertNewCells .3s linear' : ''}}>
-												{value.value}
-										</div>
-									</div>
+	return(
+		<div ref={gameCanvas} className='GameCanvas' onAnimationEnd={innerCellAnimationEndHandler} onTransitionEnd={innercellTransitionEndHandler}>
+
+			{
+				gameCells.map((value: gameCell, index: number) => {
+					const displayedValue: number | null = isCellTransition ? value.prevValue : value.curValue;
+					const isCellTransitioned: boolean = isCellTransition &&  value.path !== 0;
+					const cellStyle: CSSProperties = {
+						background: calcBgColor(displayedValue),
+						animation: isCellAppearance && value.prevValue !== value.curValue && value.curValue  ? 'insertNewCells .3s linear' : '',
+						transform: isCellTransitioned ? `translate(${0}%, -${value.path * 118}%)` : '',
+						transition: isCellTransitioned ? 'transform 2s' : '',
+					}
+
+					return (
+						<div ref={gameCanvas} key={index.toString()} className='GameCanvas-CellWrapper' style={{ width: widthHeight, height: widthHeight}} >
+							<div className='GameCanvas-CellBackground'>
+								<div className='GameCanvas-Cell' style={cellStyle}>
+									{ displayedValue }
 								</div>
+							</div>
+						</div>
+					)
 				})
 			}
 		</div>
-
-
 	)
 }
-//
