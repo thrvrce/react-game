@@ -34,6 +34,7 @@ $borderRadius: 6px;
 		@include commonCellStyle(100%);
 		font-weight: bold;
 		font-size: 2rem;
+		user-select: none;
 		// transform: translate(118%, 0%);
 		// transition: transform 3s;
 		// transition: background-color 1s;

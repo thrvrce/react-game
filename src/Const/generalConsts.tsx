@@ -10,7 +10,16 @@ const colorFor256: string = '#edcc62';
 
 const cellValueColorBelow8: string= '#776e65';
 const cellValueColorMore8: string= '#f9f6f2';
+
+const transitionUp: string = 'up';
+const transitionDown: string = 'daown';
+const transitionLeft: string = 'left';
+const transitionRight: string = 'right';
+
+const lengthBetweenCells: number = 100 / 85 *100; // соотношение длинны класса GameCanvas-CellBackground и GameCanvas-Cell.
 export {
+
+
 	colorForEmty,
 	colorFor2,
 	colorFor4,
@@ -20,6 +29,14 @@ export {
 	colorFor64,
 	colorFor128,
 	colorFor256,
+
 	cellValueColorBelow8,
-	cellValueColorMore8
+	cellValueColorMore8,
+
+	transitionUp,
+	transitionDown,
+	transitionLeft,
+	transitionRight,
+
+	lengthBetweenCells,
 }

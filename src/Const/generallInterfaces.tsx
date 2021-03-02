@@ -1,7 +1,7 @@
 interface gameCell {
 	curValue: number | null,
 	prevValue: number | null,
-	isMerged: boolean,
+	isUpdatedOrNew: boolean,
 	path: number
 }
 

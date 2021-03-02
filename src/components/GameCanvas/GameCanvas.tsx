@@ -1,9 +1,9 @@
 import React, { CSSProperties } from "react";
 import './GameCanvas.css'
 import {gameCell} from '../../Const/generallInterfaces'
-import { cellValueColorBelow8, cellValueColorMore8, colorForEmty, colorFor2, colorFor4, colorFor8, colorFor16,	colorFor32,	colorFor64,	colorFor128, colorFor256,} from '../../Const/generalConsts'
+import { cellValueColorBelow8, cellValueColorMore8, colorForEmty, colorFor2, colorFor4, colorFor8, colorFor16,	colorFor32,	colorFor64,	colorFor128, colorFor256, transitionUp,	transitionDown,	transitionLeft,	transitionRight, lengthBetweenCells} from '../../Const/generalConsts'
 
-interface props {gameCells: gameCell[], isCellAppearance: boolean, isCellTransition: boolean, cellAnimationEndHandler: Function, cellTransitionEndHandler: Function};
+interface props {gameCells: gameCell[], isCellAppearance: boolean, transitionDirection: string, cellAnimationEndHandler: Function, cellTransitionEndHandler: Function};
 
 function calcBgColor(value: number | null): string{
 	let result: string = '';
@@ -20,14 +20,31 @@ function calcBgColor(value: number | null): string{
 	}
 	return result;
 }
-export default function GameCanvas({gameCells, isCellAppearance, isCellTransition, cellAnimationEndHandler, cellTransitionEndHandler}:props) {
+
+
+function calcTranslateX(direction: string, path:number){
+	switch(direction) {
+		case transitionRight: return path * lengthBetweenCells;
+		case transitionLeft: return -path * lengthBetweenCells;
+		default: return 0;
+	}
+}
+
+function calcTranslateY(direction: string, path:number){
+	switch(direction) {
+		case transitionDown: return path * lengthBetweenCells;
+		case transitionUp: return -path * lengthBetweenCells;
+		default: return 0;
+	}
+}
+export default function GameCanvas({gameCells, isCellAppearance, transitionDirection, cellAnimationEndHandler, cellTransitionEndHandler}:props) {
 	const widthHeight = `${100 / Math.sqrt(gameCells.length)}%`;
 	const gameCanvas = React.useRef<HTMLDivElement>(null)
 	const handleAppearAnimation = React.useRef(false);
 	const handleCellTransition = React.useRef(false);
 
 	handleAppearAnimation.current = isCellAppearance;
-	handleCellTransition.current = isCellTransition;
+	handleCellTransition.current = transitionDirection !== '';
 
 
 	function innerCellAnimationEndHandler(){
@@ -55,12 +72,14 @@ export default function GameCanvas({gameCells, isCellAppearance, isCellTransitio
 
 			{
 				gameCells.map((value: gameCell, index: number) => {
-					const displayedValue: number | null = isCellTransition ? value.prevValue : value.curValue;
-					const isCellTransitioned: boolean = isCellTransition &&  value.path !== 0;
+					const displayedValue: number | null = transitionDirection ? value.prevValue : value.curValue;
+					const isCellTransitioned: boolean = transitionDirection !== '' &&  value.path !== 0;
+
 					const cellStyle: CSSProperties = {
+						color: displayedValue !== null && displayedValue < 8   ? cellValueColorBelow8 : cellValueColorMore8,
 						background: calcBgColor(displayedValue),
-						animation: isCellAppearance && value.prevValue !== value.curValue && value.curValue  ? 'insertNewCells .3s linear' : '',
-						transform: isCellTransitioned ? `translate(${0}%, -${value.path * 118}%)` : '',
+						animation: isCellAppearance && value.prevValue !== value.curValue && value.curValue && value.isUpdatedOrNew ? 'insertNewCells .3s linear' : '',
+						transform: isCellTransitioned ? `translate(${calcTranslateX(transitionDirection, value.path)}%, ${calcTranslateY(transitionDirection, value.path)}%)` : '',
 						transition: isCellTransitioned ? 'transform 2s' : '',
 					}
 

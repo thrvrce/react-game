@@ -5,7 +5,10 @@ import CurrentGameStatistics from "./CurrentGameStatistics/CurrentGameStatistics
 import GameCanvas from './GameCanvas/GameCanvas'
 
 import {gameCell} from '../Const/generallInterfaces'
+import {transitionUp,	transitionDown,	transitionLeft,	transitionRight} from '../Const/generalConsts'
 
+
+const Events: string[] = [transitionUp,	transitionDown,	transitionLeft,	transitionRight]
 
 function getRandomNumber(maxValue: number): number{
 	return Math.floor(Math.random() * maxValue);
@@ -13,7 +16,7 @@ function getRandomNumber(maxValue: number): number{
 
 function getRandom2Or4Value(): gameCell{
 	const isTwo: boolean = Math.floor(Math.random() * 10) < 9;
-	return isTwo ? {	curValue: 2, prevValue: null, isMerged: false, path: 0} : {curValue: 4, prevValue: null, isMerged: false, path: 0};
+	return isTwo ? {	curValue: 2, prevValue: null, isUpdatedOrNew: true, path: 0} : {curValue: 4, prevValue: null, isUpdatedOrNew: true, path: 0};
 }
 
 function insertRandom2or4ValueToEmptyField(arr: gameCell[], numOfInserts: number, fieldSize: number):  gameCell[]{
@@ -44,12 +47,10 @@ function insertRandom2or4ValueToEmptyField(arr: gameCell[], numOfInserts: number
 }
 
 function getEmptyGameCell(): gameCell{
-	// return {curValue: null, prevValue: null, isMerged: false, path: 0};
-	return {curValue: null, prevValue: null, isMerged: false, path: 0};
+	return {curValue: null, prevValue: null, isUpdatedOrNew: false, path: 0};
 }
 
 function generateNewGame(fieldSize : number = 4): gameCell[]{
-	//const emptyGameCell : gameCell = {curValue: null, prevValue: null, isMerged: false, path: 0}
 	const numOfInsertedValuesOnNewGame = 2;
 
 	let array:gameCell[] = new Array(fieldSize ** 2).fill(getEmptyGameCell());
@@ -58,68 +59,98 @@ function generateNewGame(fieldSize : number = 4): gameCell[]{
 		array[index] = getEmptyGameCell();
 	}
 
-	// const valuesForInsert: {indexForInsert:number, gameCell: gameCell}[] =
 	array = insertRandom2or4ValueToEmptyField(array, numOfInsertedValuesOnNewGame, fieldSize);
-
-	// valuesForInsert.forEach( (value) => array[value.indexForInsert] = value.gameCell);
 
 	return array;
 }
 
 
 
-function calculateNewCellsState(gameCellsToChange:gameCell[]) :{isArrChanged: boolean, newArr :gameCell[]}{
+function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string) :{isArrChanged: boolean, newArr :gameCell[]}{
 	const newArr = gameCellsToChange;
 	let isArrChanged: boolean = false;
-	const size = 4;
-	let collumnStartIndex: number = 0;
-	let horizontalOffset: number = 0;
-	let verticalOffset: number = 0;
-	let lastColumnIndex: number = 0;
+	const size = Math.sqrt(newArr.length);
+	let mainAxisStartIndex: number = 0;
+	let mainAxisOffset: number = 0;
+	let crossAxisOffset: number = 0;
+	let mainAxisLastIndex: number = 0;
 
-	if ('ArrowUp' === 'ArrowUp') {
-		collumnStartIndex = 0;
-		horizontalOffset = 1;
-		verticalOffset = size;
-		lastColumnIndex = size - 1;
+	switch (direction) {
+		case transitionUp: {
+			mainAxisStartIndex = 0;
+			mainAxisLastIndex = size - 1;
+			mainAxisOffset = 1;
+			crossAxisOffset = size;
+			break;
+		}
+
+		case transitionDown: {
+			mainAxisStartIndex = newArr.length - size;
+			mainAxisLastIndex = newArr.length - 1;
+			mainAxisOffset = 1;
+			crossAxisOffset = -size;
+			break;
+		}
+
+		case transitionLeft: {
+			mainAxisStartIndex = 0;
+			mainAxisLastIndex = newArr.length - size;
+			mainAxisOffset = size;
+			crossAxisOffset = 1;
+			break;
+		}
+
+		case transitionRight: {
+			mainAxisStartIndex = size - 1;
+			mainAxisLastIndex = newArr.length - 1;
+			mainAxisOffset = size;
+			crossAxisOffset = -1;
+			break;
+		}
+		default: {}
 	}
 
 	newArr.forEach(cell => cell.prevValue = cell.curValue);
 
-	for (let curColumnIndex = collumnStartIndex; curColumnIndex <= lastColumnIndex; curColumnIndex += horizontalOffset) {
-		for (let srcCellIndexForMove = curColumnIndex + verticalOffset; srcCellIndexForMove < newArr.length; srcCellIndexForMove += verticalOffset) {
+	for (let curColumnIndex = mainAxisStartIndex; curColumnIndex <= mainAxisLastIndex; curColumnIndex += mainAxisOffset) {
+		const testArr = [];
 
-			// newArr[srcCellIndexForMove].prevValue = newArr[srcCellIndexForMove].curValue;
+		for (let iteration = 0; iteration < size; iteration++) {
+			testArr.push(curColumnIndex + crossAxisOffset * iteration)
+		}
+
+			for (let srcCellIndexForMove = curColumnIndex + crossAxisOffset; testArr.includes(srcCellIndexForMove); srcCellIndexForMove += crossAxisOffset) {
 
 				let curCheckRowNumber: number = 0;
 				let processAnalysis: boolean = true;
 
 				while(processAnalysis) {
-					const srcCellIndex: number = srcCellIndexForMove - (curCheckRowNumber * verticalOffset);
+					const srcCellIndex: number = srcCellIndexForMove - (curCheckRowNumber * crossAxisOffset);
 					const srcCell: gameCell = newArr[srcCellIndex];
 
-					if (!srcCell) {
+					const dstCellIndex:number = srcCellIndex - crossAxisOffset;
+					const dstCell:gameCell = newArr[dstCellIndex];
+
+
+					if (!srcCell || !dstCell || !testArr.includes(srcCellIndex) || !testArr.includes(dstCellIndex)) {
 						break;
 					}
 
 					if ( srcCell.curValue ){
-						const dstCellIndex:number = srcCellIndex - verticalOffset;
-						const dstCell:gameCell = newArr[dstCellIndex];
-
-						if (dstCell !== undefined && (dstCell.curValue === null || (dstCell.curValue === srcCell.curValue && dstCell.isMerged === false && srcCell.isMerged === false))){
+						if (dstCell !== undefined && (dstCell.curValue === null || (dstCell.curValue === srcCell.curValue && dstCell.isUpdatedOrNew === false && srcCell.isUpdatedOrNew === false))){
 
 							if (dstCell.curValue === null) {
 								dstCell.curValue = 	srcCell.curValue;
 							} else {
-								dstCell.prevValue = dstCell.curValue;
 								dstCell.curValue = dstCell.curValue * 2 ;
-								dstCell.isMerged = true;
+								dstCell.isUpdatedOrNew = true;
 							}
 
 							srcCell.curValue = null;
 							newArr[srcCellIndexForMove].path += 1;
 							curCheckRowNumber += 1;
 							isArrChanged = true;
+
 						} else {
 							processAnalysis = false;
 						}
@@ -132,27 +163,37 @@ function calculateNewCellsState(gameCellsToChange:gameCell[]) :{isArrChanged: bo
 	return { isArrChanged, newArr };
 }
 
+function getCellsTransitionDirection(eventName: string): string {
+
+	switch(eventName){
+		case 'ArrowUp': return transitionUp;
+		case 'ArrowDown': return transitionDown;
+		case 'ArrowRight': return transitionRight;
+		case 'ArrowLeft': return transitionLeft;
+		default: return '';
+	}
+}
 
 export default function GameField() {
 	const [gameCells, setGameCells] = React.useState(generateNewGame())
 
-	// let isCellAppearance = isCellTransition ? false : true;
-	// let isCellTransition = isCellTransition ? true : false;
 	let [isCellAppearance, setisCellAppearance] = React.useState(true);
-	let [isCellTransition, setisCellTransition] = React.useState(false);
+	let [transitionDirection, settransitionDirection] = React.useState('');
+
 
 	const keyDownHandler = React.useCallback((e: KeyboardEvent)=>{
-		if (e.key === 'ArrowUp') {
-			console.log(e.key)
-			const {isArrChanged, newArr } = calculateNewCellsState(gameCells);
+		const cellTransitionDirection: string = getCellsTransitionDirection(e.key);
+		console.log(e.key)
+		if (Events.includes(cellTransitionDirection)) {
+			console.log(cellTransitionDirection)
+			const {isArrChanged, newArr } = calculateNewCellsState(gameCells, cellTransitionDirection);
 			if (isArrChanged) {
 				setGameCells([...newArr])
-				setisCellTransition(true);
+				settransitionDirection(cellTransitionDirection);
 			} else {
 				setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)))
 				setisCellAppearance(true);
 			}
-
 		}
 	}, [gameCells])
 
@@ -163,28 +204,24 @@ export default function GameField() {
 
 	function newGameHAndler() {
 		setGameCells(generateNewGame());
-		// setisCellTransition(false);
 		setisCellAppearance(true)
-
 	}
 
 	function cellAnimationEndHandler(){
-		// setisCellTransition(true);
 		setisCellAppearance(false)
 		setGameCells(gameCells.map( (cell) => {
 			cell.prevValue = null;
-			cell.isMerged = false;
+			cell.isUpdatedOrNew = false;
 			cell.path = 0;
 			return cell;
 		}));
-		console.log(321)
 	}
 
 	function cellTransitionEndHandler (){
 		setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)));
 
 		setisCellAppearance(true);
-		setisCellTransition(false);
+		settransitionDirection('');
 	}
 
 	return (
@@ -194,7 +231,7 @@ export default function GameField() {
 			<GameCanvas
 			gameCells={gameCells}
 			isCellAppearance={isCellAppearance}
-			isCellTransition={isCellTransition}
+			transitionDirection={transitionDirection}
 			cellAnimationEndHandler={cellAnimationEndHandler}
 			cellTransitionEndHandler={cellTransitionEndHandler}
 			/>
