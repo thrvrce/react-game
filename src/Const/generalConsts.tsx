@@ -8,6 +8,8 @@ const colorFor64: string = '#f75f3b';
 const colorFor128: string = '#edd073';
 const colorFor256: string = '#edcc62';
 
+const cellValueColorBelow8: string= '#776e65';
+const cellValueColorMore8: string= '#f9f6f2';
 export {
 	colorForEmty,
 	colorFor2,
@@ -18,4 +20,6 @@ export {
 	colorFor64,
 	colorFor128,
 	colorFor256,
+	cellValueColorBelow8,
+	cellValueColorMore8
 }

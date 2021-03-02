@@ -5,17 +5,7 @@ import CurrentGameStatistics from "./CurrentGameStatistics/CurrentGameStatistics
 import GameCanvas from './GameCanvas/GameCanvas'
 
 import {gameCell} from '../Const/generallInterfaces'
-import {
-	colorForEmty,
-	colorFor2,
-	colorFor4,
-	colorFor8,
-	colorFor16,
-	colorFor32,
-	colorFor64,
-	colorFor128,
-	colorFor256,
-} from '../Const/generalConsts'
+import { colorForEmty, colorFor2, colorFor4, colorFor8, colorFor16,	colorFor32,	colorFor64,	colorFor128, colorFor256,} from '../Const/generalConsts'
 
 function getRandomNumber(maxValue: number): number{
 	return Math.floor(Math.random() * maxValue);
@@ -60,26 +50,40 @@ function generateNewGame(fieldSize : number = 4): gameCell[]{
 	const numOfInsertedValuesOnNewGame = 2;
 
 	const array:gameCell[] = new Array(fieldSize ** 2).fill(emptyGameCell);
-	const valuesForInsert: {indexForInsert:number, gameCell: gameCell}[] = insertRandom2or4ValueToEmptyField(array, numOfInsertedValuesOnNewGame, fieldSize);
+	const valuesForInsert: {indexForInsert:number, gameCell: gameCell}[] = insertRandom2or4ValueToEmptyField(array, /*numOfInsertedValuesOnNewGame*/ 12, fieldSize);
 
 	valuesForInsert.forEach( (value) => array[value.indexForInsert] = value.gameCell);
 
 	return array;
 }
 
-
+let i:number = 1;
 export default function GameField() {
 	const [gameCells, setGameCells] = React.useState(generateNewGame())
+	const [isCellTransition,  setisCellTransition] = React.useState(false);
+
+	// let animateCellAppearance = isCellTransition ? false : true;
+	// let animateCellTransition = isCellTransition ? true : false;
+	let [animateCellAppearance, setanimateCellAppearance] = React.useState(true);
+	let [animateCellTransition, setanimateCellTransition] = React.useState(false);
 
 	function newGameHAndler() {
 		setGameCells(generateNewGame());
+		// setisCellTransition(false);
+		setanimateCellAppearance(true)
+	}
+
+	function animationEndHandler(){
+		// setisCellTransition(true);
+		setanimateCellAppearance(false)
+		console.log(321)
 	}
 
 	return (
 		<div className='GameField'>
 			<ControlPanel newGameHAndler={newGameHAndler}/>
 			<CurrentGameStatistics/>
-			<GameCanvas gameCells={gameCells}/>
+			<GameCanvas gameCells={gameCells} animateCellAppearance={animateCellAppearance} animateCellTransition={animateCellTransition} animationEndHandler={animationEndHandler}/>
 		</div>
 	)
 }
