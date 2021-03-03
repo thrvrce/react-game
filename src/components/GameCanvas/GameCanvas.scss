@@ -20,7 +20,7 @@ $borderRadius: 6px;
   height: $standartCellSize;
 	background-color: #bbada0;
 	border-radius: $borderRadius;
-
+	margin-top: 1rem;
 	&-CellWrapper{
 		@include flexCentered;
 	}

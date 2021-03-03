@@ -1,38 +1,33 @@
 .ControlPanel{
 	display: flex;
 	flex-flow:  row wrap ;
-	padding: 1rem;
-	background-color: white;
+	justify-content: space-evenly;
+	// padding: 1rem;
+	// background-color: white;
 
-	.button:hover{
+	.controlButton:hover{
 		cursor: pointer;
 		opacity: 0.7;
-	}
-	.NewGame{
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    flex-grow: 1;
-    flex-shrink: 1;
-    margin: 1rem;
-    padding: 0.5rem;
-    background: #8f7a66;
-    color: white;
-    border-radius: 3px;
-    font-weight: bold;
+
 	}
 
-	.GameStatistics{
+	.controlButton:focus{
+		border: none;
+	}
+	.controlButton{
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    flex-grow: 1;
-    flex-shrink: 1;
-    margin: 1rem;
+    // flex-grow: 1;
+    // flex-shrink: 1;
+    margin-top: 1rem;
     padding: 0.5rem;
     background: #8f7a66;
     color: white;
-    border-radius: 3px;
+    border-radius: 6px;
     font-weight: bold;
+		border: none;
 	}
+
+
 }

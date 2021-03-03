@@ -9,8 +9,8 @@ export default function ControlPanel({newGameHAndler}: ControlPAnel) {
 	return(
 		<div className='ControlPanel'>
 			{/* <div>Nickname or login\authorization</div> */}
-			<input type='button' value='New Game' className='NewGame button' onClick={() => newGameHAndler()}></input>
-			<div className='GameStatistics'> Game Statistics</div>
+			<input type='button' value='New Game' className=' controlButton' onClick={() => newGameHAndler()}></input>
+			<input type='button' value='Game Statistics' className=' controlButton'></input>
 		</div>
 	)
 }

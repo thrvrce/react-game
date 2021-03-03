@@ -10,6 +10,7 @@
   height: 40rem;
   background-color: #bbada0;
   border-radius: 6px;
+  margin-top: 1rem;
 }
 
 .GameCanvas-CellWrapper {

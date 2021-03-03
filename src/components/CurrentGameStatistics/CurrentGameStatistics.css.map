@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": "AAAA,AAAA,sBAAsB,CAAA;EACrB,OAAO,EAAE,IAAI;EACb,SAAS,EAAG,QAAS;EACrB,OAAO,EAAE,IAAI;EACb,gBAAgB,EAAE,KAAK;CACvB",
+    "mappings": "AAAA,AAAA,sBAAsB,CAAA;EACrB,OAAO,EAAE,IAAI;EACb,SAAS,EAAG,QAAS;EACrB,eAAe,EAAE,YAAY;EAC7B,aAAa,EAAE,GAAG;EAClB,UAAU,EAAE,OAAO;EACnB,UAAU,EAAE,IAAI;CAChB",
     "sources": [
         "CurrentGameStatistics.scss"
     ],

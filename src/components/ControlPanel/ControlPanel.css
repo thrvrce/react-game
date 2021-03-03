@@ -6,40 +6,21 @@
   -webkit-box-direction: normal;
       -ms-flex-flow: row wrap;
           flex-flow: row wrap;
-  padding: 1rem;
-  background-color: white;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
 }
 
-.ControlPanel .button:hover {
+.ControlPanel .controlButton:hover {
   cursor: pointer;
   opacity: 0.7;
 }
 
-.ControlPanel .NewGame {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-flow: column nowrap;
-          flex-flow: column nowrap;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  -ms-flex-negative: 1;
-      flex-shrink: 1;
-  margin: 1rem;
-  padding: 0.5rem;
-  background: #8f7a66;
-  color: white;
-  border-radius: 3px;
-  font-weight: bold;
+.ControlPanel .controlButton:focus {
+  border: none;
 }
 
-.ControlPanel .GameStatistics {
+.ControlPanel .controlButton {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -50,16 +31,12 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  -ms-flex-negative: 1;
-      flex-shrink: 1;
-  margin: 1rem;
+  margin-top: 1rem;
   padding: 0.5rem;
   background: #8f7a66;
   color: white;
-  border-radius: 3px;
+  border-radius: 6px;
   font-weight: bold;
+  border: none;
 }
 /*# sourceMappingURL=ControlPanel.css.map */

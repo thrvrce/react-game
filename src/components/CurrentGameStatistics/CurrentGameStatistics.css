@@ -6,7 +6,10 @@
   -webkit-box-direction: normal;
       -ms-flex-flow: row wrap;
           flex-flow: row wrap;
-  padding: 1rem;
-  background-color: white;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  border-radius: 6px;
+  background: #bbada0;
+  margin-top: 1rem;
 }
 /*# sourceMappingURL=CurrentGameStatistics.css.map */
