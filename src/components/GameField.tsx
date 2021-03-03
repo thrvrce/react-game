@@ -189,13 +189,32 @@ function getCellsTransitionDirection(eventName: string): string {
 	}
 }
 
+function saveGame (gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number) {
+	// localStorage.getItem('2048game')
+	const savedGame = { gameCells, score, cellMerges, movedCells, gameTime,volume,};
+	localStorage.setItem('2048game', JSON.stringify(savedGame));
+
+}
+
+function setGameStartData(fieldSize: number):gameCell[]{
+	// const savedGame = localStorage.getItem('2048game');
+
+	// if (savedGame) {
+	// 	const savedGameCells = JSON.parse(savedGame).gameCells;
+	// 	return savedGameCells;
+	// } else {
+		return generateNewGame(fieldSize);
+	// }
+
+}
 export default function GameField() {
 	const [gameStartTime, setgameStartTime] = React.useState(new Date().toISOString())//todo from storage
 	const [score, setscore] = React.useState(0);//todo from storage
 	const [cellMerges, setcellMerges] = React.useState(0);//todo from storage
 	const [movedCells, setmovedCells] = React.useState(0);//todo from storage
 	const [gameTime, setgameTime] = React.useState(0);//todo from storage
-	const [gameCells, setGameCells] = React.useState(generateNewGame())
+	const [fieldSize, setfieldSize] = React.useState(4)//todo from storage
+	const [gameCells, setGameCells] = React.useState(setGameStartData(fieldSize))//generateNewGame())//todo from storage
 	const [fullScreenButtonValue, setfullScreenButtonValue] = React.useState<string>('Open in fullscreen');
 	let [isCellAppearance, setisCellAppearance] = React.useState(true);
 	let [transitionDirection, settransitionDirection] = React.useState('');
@@ -210,6 +229,7 @@ export default function GameField() {
 
 	const keyDownHandler = React.useCallback((e: KeyboardEvent)=>{
 		if(cancalculateCelsNewState.current) {
+			saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize) ;
 			cancalculateCelsNewState.current = false;
 			const cellTransitionDirection: string = getCellsTransitionDirection(e.key);
 
@@ -235,7 +255,7 @@ export default function GameField() {
 				}
 			}
 		}
-	}, [gameCells, pointsSound, moveSound, noChangeSound])
+	}, [gameCells, pointsSound, moveSound, noChangeSound, score, cellMerges, movedCells, gameTime, volume, fieldSize])
 
 
 	React.useEffect(()=>{
@@ -250,7 +270,7 @@ export default function GameField() {
 
 	function newGameHAndler() {
 		clickSound();
-		setGameCells(generateNewGame());
+		setGameCells(generateNewGame(fieldSize));
 		setisCellAppearance(true)
 		setscore(0);
 		setcellMerges(0);
@@ -292,10 +312,14 @@ export default function GameField() {
 		settransitionDirection('');
 	}
 
+	function fieldSizeSelecthandler(newFieldSize: number) {
+		setfieldSize(newFieldSize);
+	}
+
 	return (
 		<div ref={gameWStatAndCanvasWrapper} className='GameField'>
 			{/* <div ref={gameWStatAndCanvasWrapper} className='gameWStatAndCanvasWrapper'> */}
-			<SettingsPanel volume={volume} setvolume={setvolume}/>
+			<SettingsPanel volume={volume} setvolume={setvolume} fieldSize={fieldSize} fieldSizeSelecthandler={fieldSizeSelecthandler} />
 			<ControlPanel newGameHAndler={newGameHAndler} toggleFullScreen={toggleFullScreen} fullScreenButtonValue={fullScreenButtonValue}/>
 
 				<CurrentGameStatistics
