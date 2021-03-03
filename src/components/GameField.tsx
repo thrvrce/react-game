@@ -220,6 +220,7 @@ export default function GameField() {
 	let [transitionDirection, settransitionDirection] = React.useState('');
 	let cancalculateCelsNewState = React.useRef(false);
 	let gameWStatAndCanvasWrapper = React.useRef<HTMLDivElement>(null);
+	const [isAutoplay, setisAutoplay] = React.useState(false);
 
 	const [volume, setvolume] = React.useState(1)
 	const [pointsSound] = useSound(points, {volume});
@@ -268,15 +269,21 @@ export default function GameField() {
 		return () =>  clearInterval(timeIncrementInterval);
 	},[gameStartTime])
 
-	function newGameHAndler() {
+
+	const newGame = React.useCallback ( ()=> {
 		clickSound();
-		setGameCells(generateNewGame(fieldSize));
 		setisCellAppearance(true)
 		setscore(0);
 		setcellMerges(0);
 		setmovedCells(0);
 		setgameTime(0);
-		setgameStartTime(new Date().toISOString())
+		setgameStartTime(new Date().toISOString());
+		setGameCells(generateNewGame(fieldSize));
+	}, [fieldSize, clickSound])
+
+	function newGameHAndler() {
+		setisAutoplay(false);
+		newGame();
 	}
 
 	function toggleFullScreen() {
@@ -293,8 +300,6 @@ export default function GameField() {
 	}
 
 	function cellAnimationEndHandler(){
-		// pointsSound();
-		// moveSound()
 		setisCellAppearance(false)
 		setGameCells(gameCells.map( (cell) => {
 			cell.prevValue = null;
@@ -306,7 +311,6 @@ export default function GameField() {
 	}
 
 	function cellTransitionEndHandler (){
-
 		setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)));
 		setisCellAppearance(true);
 		settransitionDirection('');
@@ -316,11 +320,27 @@ export default function GameField() {
 		setfieldSize(newFieldSize);
 	}
 
+	React.useEffect(() => {
+		let interval: any;
+		if (isAutoplay) {
+			const getRandomKeyDownevent = ()=> {
+				return new KeyboardEvent('keydown', {key:['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'][getRandomNumber(4)]});
+			}
+			interval = setInterval(() => window.dispatchEvent(getRandomKeyDownevent()) , 1000);
+		}
+		return () =>  clearInterval(interval);
+	}, [isAutoplay])
+
+	function autoplayHandler() {
+		newGame();
+		setisAutoplay(!isAutoplay);
+	}
+
 	return (
 		<div ref={gameWStatAndCanvasWrapper} className='GameField'>
 			{/* <div ref={gameWStatAndCanvasWrapper} className='gameWStatAndCanvasWrapper'> */}
 			<SettingsPanel volume={volume} setvolume={setvolume} fieldSize={fieldSize} fieldSizeSelecthandler={fieldSizeSelecthandler} />
-			<ControlPanel newGameHAndler={newGameHAndler} toggleFullScreen={toggleFullScreen} fullScreenButtonValue={fullScreenButtonValue}/>
+			<ControlPanel newGameHAndler={newGameHAndler} toggleFullScreen={toggleFullScreen} fullScreenButtonValue={fullScreenButtonValue} autoplayHandler={autoplayHandler}/>
 
 				<CurrentGameStatistics
 					score={score}
