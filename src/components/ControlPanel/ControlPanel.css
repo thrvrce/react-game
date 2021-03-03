@@ -10,6 +10,11 @@
       -ms-flex-pack: space-evenly;
           justify-content: space-evenly;
   width: 30rem;
+  margin-top: 1rem;
+  border-radius: 6px;
+  /* background: #1311094f; */
+  padding: 0.5rem;
+  background: #bbada0;
 }
 
 .ControlPanel .controlButton:hover {
@@ -32,7 +37,6 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin-top: 1rem;
   padding: 0.5rem;
   background: #8f7a66;
   color: white;

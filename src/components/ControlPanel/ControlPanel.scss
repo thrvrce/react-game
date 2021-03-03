@@ -5,6 +5,11 @@
 	// padding: 1rem;
 	// background-color: white;
 	width: 30rem;
+	margin-top: 1rem;
+	border-radius: 6px;
+	/* background: #1311094f; */
+	padding: 0.5rem;
+	background: #bbada0;
 	.controlButton:hover{
 		cursor: pointer;
 		opacity: 0.7;
@@ -20,7 +25,7 @@
     align-items: center;
     // flex-grow: 1;
     // flex-shrink: 1;
-    margin-top: 1rem;
+    // margin-top: 1rem;
     padding: 0.5rem;
     background: #8f7a66;
     color: white;
