@@ -80,12 +80,22 @@ export default function GameCanvas({gameCells, isCellAppearance, transitionDirec
 					const displayedValue: number | null = transitionDirection ? value.prevValue : value.curValue;
 					const isCellTransitioned: boolean = transitionDirection !== '' &&  value.path !== 0;
 
+					let fontSize: number = 2;
+					if (displayedValue){
+						if (displayedValue > 512) {
+							fontSize = 1.2;
+						} else if (displayedValue > 64) {
+							fontSize = 1.6;
+						}
+					}
+
 					const cellStyle: CSSProperties = {
 						color: displayedValue !== null && displayedValue < 8   ? cellValueColorBelow8 : cellValueColorMore8,
 						background: calcBgColor(displayedValue),
 						animation: isCellAppearance && value.prevValue !== value.curValue && value.curValue && value.isUpdatedOrNew ? 'insertNewCells .3s linear' : '',
 						transform: isCellTransitioned ? `translate(${calcTranslateX(transitionDirection, value.path)}%, ${calcTranslateY(transitionDirection, value.path)}%)` : '',
 						transition: isCellTransitioned ? 'transform .3s' : '',
+						fontSize: `${fontSize}rem`,
 					}
 
 					return (
