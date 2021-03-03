@@ -1,7 +1,9 @@
 import React, { CSSProperties } from "react";
 import './GameCanvas.css'
 import {gameCell} from '../../Const/generallInterfaces'
-import { cellValueColorBelow8, cellValueColorMore8, colorForEmty, colorFor2, colorFor4, colorFor8, colorFor16,	colorFor32,	colorFor64,	colorFor128, colorFor256, transitionUp,	transitionDown,	transitionLeft,	transitionRight, lengthBetweenCells} from '../../Const/generalConsts'
+import { cellValueColorBelow8, cellValueColorMore8, colorForEmty, colorFor2, colorFor4, colorFor8, colorFor16,	colorFor32,	colorFor64,	colorFor128, colorFor256,colorFor512,
+	colorFor1024,
+	colorFor2048, transitionUp,	transitionDown,	transitionLeft,	transitionRight, lengthBetweenCells} from '../../Const/generalConsts'
 
 interface props {gameCells: gameCell[], isCellAppearance: boolean, transitionDirection: string, cellAnimationEndHandler: Function, cellTransitionEndHandler: Function};
 
@@ -16,6 +18,9 @@ function calcBgColor(value: number | null): string{
 		case 64 : result = colorFor64; break;
 		case 128 : result = colorFor128; break;
 		case 256 : result = colorFor256; break;
+		case 512 : result = colorFor512; break;
+		case 1024 : result = colorFor1024; break;
+		case 2048 : result = colorFor2048; break;
 		default: result = colorForEmty; break;
 	}
 	return result;
