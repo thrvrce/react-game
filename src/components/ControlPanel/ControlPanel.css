@@ -9,7 +9,7 @@
   -webkit-box-pack: space-evenly;
       -ms-flex-pack: space-evenly;
           justify-content: space-evenly;
-  width: 40rem;
+  width: 30rem;
 }
 
 .ControlPanel .controlButton:hover {
