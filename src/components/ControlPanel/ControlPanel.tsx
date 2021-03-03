@@ -12,7 +12,7 @@ export default function ControlPanel({newGameHAndler, toggleFullScreen, fullScre
 		<div className='ControlPanel'>
 			{/* <div>Nickname or login\authorization</div> */}
 			<input type='button' value='New Game' className=' controlButton' onClick={() => newGameHAndler()}></input>
-			<input type='button' value='Game Statistics' className=' controlButton'></input>
+			{/* <input type='button' value='Game Statistics' className=' controlButton'></input> */}
 			<input type='button' value={fullScreenButtonValue} className=' controlButton'onClick={() => { toggleFullScreen()}}></input>
 		</div>
 	)

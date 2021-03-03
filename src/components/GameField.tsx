@@ -235,7 +235,7 @@ export default function GameField() {
 				}
 			}
 		}
-	}, [gameCells])
+	}, [gameCells, pointsSound, moveSound, noChangeSound])
 
 
 	React.useEffect(()=>{
