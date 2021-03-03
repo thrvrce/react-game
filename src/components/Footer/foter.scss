@@ -1,0 +1,25 @@
+footer{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	background: rgb(243, 178, 122);
+	margin-top: 1rem;
+	border-radius: 6px;
+
+	a{
+		text-decoration: none;
+	}
+
+	img{
+		 width: 40px;
+		 height: 40px;
+	 }
+
+	 div{
+		display: flex;
+		align-items: center;
+		align-self: center;
+		color: rgb(119, 110, 101);
+		font-weight: bold;
+	}
+}

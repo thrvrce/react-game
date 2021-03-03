@@ -3,12 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
 import GameField from './components/GameField'
+import Footer from './components/Footer/footer'
 
 
 ReactDOM.render(
   <React.StrictMode>
     {/* <App /> */}
-		<GameField/>
+		<div>
+			<GameField/>
+			<Footer/>
+		</div>
   </React.StrictMode>,
   document.getElementById('root')
 );
