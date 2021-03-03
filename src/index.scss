@@ -20,3 +20,16 @@ code {
 	display: flex;
 	justify-content: center;
 }
+
+.mainContent{
+	background: antiquewhite;
+	border-radius: 6px;
+	animation-name: gamefieldLoad;
+  animation-duration: 1s;
+}
+
+@keyframes gamefieldLoad {
+	from{ transform: scale(0)}
+	to{transform: scale(1)}
+
+}

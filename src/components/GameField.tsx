@@ -6,6 +6,7 @@ import GameCanvas from './GameCanvas/GameCanvas'
 
 import {gameCell} from '../Const/generallInterfaces'
 import {transitionUp,	transitionDown,	transitionLeft,	transitionRight} from '../Const/generalConsts'
+import { isConstructorDeclaration } from 'typescript';
 
 
 const Events: string[] = [transitionUp,	transitionDown,	transitionLeft,	transitionRight]
@@ -189,9 +190,11 @@ export default function GameField() {
 	const [movedCells, setmovedCells] = React.useState(0);//todo from storage
 	const [gameTime, setgameTime] = React.useState(0);//todo from storage
 	const [gameCells, setGameCells] = React.useState(generateNewGame())
+	const [fullScreenButtonValue, setfullScreenButtonValue] = React.useState<string>('Open in fullscreen');
 	let [isCellAppearance, setisCellAppearance] = React.useState(true);
 	let [transitionDirection, settransitionDirection] = React.useState('');
 	let cancalculateCelsNewState = React.useRef(false);
+	let gameWStatAndCanvasWrapper = React.useRef<HTMLDivElement>(null);
 
 
 	const keyDownHandler = React.useCallback((e: KeyboardEvent)=>{
@@ -238,6 +241,18 @@ export default function GameField() {
 		setgameStartTime(new Date().toISOString())
 	}
 
+	function toggleFullScreen() {
+		if(document.fullscreenElement){
+			document.exitFullscreen();
+			setfullScreenButtonValue('Open in fullscreen');
+		} else {
+			if (gameWStatAndCanvasWrapper.current !== null) {
+				gameWStatAndCanvasWrapper.current.requestFullscreen();
+				setfullScreenButtonValue('Close fullscreen');
+			}
+		}
+	}
+
 	function cellAnimationEndHandler(){
 		setisCellAppearance(false)
 		setGameCells(gameCells.map( (cell) => {
@@ -256,21 +271,25 @@ export default function GameField() {
 	}
 
 	return (
-		<div className='GameField'>
-			<ControlPanel newGameHAndler={newGameHAndler}/>
-			<CurrentGameStatistics
-				score={score}
-				cellMerges={cellMerges}
-				movedCells={movedCells}
-				gameTime={gameTime}
-			/>
-			<GameCanvas
-				gameCells={gameCells}
-				isCellAppearance={isCellAppearance}
-				transitionDirection={transitionDirection}
-				cellAnimationEndHandler={cellAnimationEndHandler}
-				cellTransitionEndHandler={cellTransitionEndHandler}
-			/>
+		<div ref={gameWStatAndCanvasWrapper} className='GameField'>
+			{/* <div ref={gameWStatAndCanvasWrapper} className='gameWStatAndCanvasWrapper'> */}
+			<ControlPanel newGameHAndler={newGameHAndler} toggleFullScreen={toggleFullScreen} fullScreenButtonValue={fullScreenButtonValue}/>
+
+				<CurrentGameStatistics
+					score={score}
+					cellMerges={cellMerges}
+					movedCells={movedCells}
+					gameTime={gameTime}
+				/>
+				<GameCanvas
+					gameCells={gameCells}
+					isCellAppearance={isCellAppearance}
+					transitionDirection={transitionDirection}
+					cellAnimationEndHandler={cellAnimationEndHandler}
+					cellTransitionEndHandler={cellTransitionEndHandler}
+				/>
+			{/* </div> */}
+
 		</div>
 	)
 }

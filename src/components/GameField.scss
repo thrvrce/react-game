@@ -1,15 +1,16 @@
 .GameField{
 	display: flex;
 	flex-flow: column wrap;
-	// align-items: center;
+	align-items: center;
 	overflow: hidden;
 	// border: 3px solid red;
-	animation-name: gamefieldLoad;
-  animation-duration: 1s;
+	// animation-name: gamefieldLoad;
+  // animation-duration: 1s;
+	background: antiquewhite;
 }
 
-@keyframes gamefieldLoad {
-	from{ transform: scale(0)}
-	to{transform: scale(1)}
+// @keyframes gamefieldLoad {
+// 	from{ transform: scale(0)}
+// 	to{transform: scale(1)}
 
-}
+// }

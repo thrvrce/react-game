@@ -21,4 +21,35 @@ code {
       -ms-flex-pack: center;
           justify-content: center;
 }
+
+.mainContent {
+  background: antiquewhite;
+  border-radius: 6px;
+  -webkit-animation-name: gamefieldLoad;
+          animation-name: gamefieldLoad;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+}
+
+@-webkit-keyframes gamefieldLoad {
+  from {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
+@keyframes gamefieldLoad {
+  from {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
 /*# sourceMappingURL=index.css.map */

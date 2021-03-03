@@ -9,7 +9,7 @@ import Footer from './components/Footer/footer'
 ReactDOM.render(
   <React.StrictMode>
     {/* <App /> */}
-		<div>
+		<div className='mainContent'>
 			<GameField/>
 			<Footer/>
 		</div>
