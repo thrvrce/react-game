@@ -3,10 +3,16 @@ import "./GameField.css";
 import ControlPanel from "./ControlPanel/ControlPanel";
 import CurrentGameStatistics from "./CurrentGameStatistics/CurrentGameStatistics";
 import GameCanvas from './GameCanvas/GameCanvas'
+import SettingsPanel from './SettingsPanel/SettingsPanel'
+import useSound from 'use-sound';
 
 import {gameCell} from '../Const/generallInterfaces'
 import {transitionUp,	transitionDown,	transitionLeft,	transitionRight} from '../Const/generalConsts'
-import { isConstructorDeclaration } from 'typescript';
+
+import points from '../sounds/points.wav'
+import move from '../sounds/move.wav'
+import click from'../sounds/click.mp3'
+import noChange from '../sounds/noChange.flac'
 
 
 const Events: string[] = [transitionUp,	transitionDown,	transitionLeft,	transitionRight]
@@ -196,6 +202,11 @@ export default function GameField() {
 	let cancalculateCelsNewState = React.useRef(false);
 	let gameWStatAndCanvasWrapper = React.useRef<HTMLDivElement>(null);
 
+	const [volume, setvolume] = React.useState(1)
+	const [pointsSound] = useSound(points, {volume});
+	const [moveSound] = useSound(move, {volume});
+	const [clickSound] = useSound(click, {volume});
+	const [noChangeSound] = useSound(noChange, {volume});
 
 	const keyDownHandler = React.useCallback((e: KeyboardEvent)=>{
 		if(cancalculateCelsNewState.current) {
@@ -212,9 +223,15 @@ export default function GameField() {
 					setscore( (curValue) => curValue + points);
 					setcellMerges( (curValue) => curValue + cellMerges);
 					setmovedCells((curValue) => curValue + movedCells);
+					if (points) {
+						pointsSound();
+					} else {
+						moveSound();
+					}
 				} else {
 					setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)))
 					setisCellAppearance(true);
+					noChangeSound();
 				}
 			}
 		}
@@ -232,6 +249,7 @@ export default function GameField() {
 	},[gameStartTime])
 
 	function newGameHAndler() {
+		clickSound();
 		setGameCells(generateNewGame());
 		setisCellAppearance(true)
 		setscore(0);
@@ -242,6 +260,7 @@ export default function GameField() {
 	}
 
 	function toggleFullScreen() {
+		clickSound();
 		if(document.fullscreenElement){
 			document.exitFullscreen();
 			setfullScreenButtonValue('Open in fullscreen');
@@ -254,6 +273,8 @@ export default function GameField() {
 	}
 
 	function cellAnimationEndHandler(){
+		// pointsSound();
+		// moveSound()
 		setisCellAppearance(false)
 		setGameCells(gameCells.map( (cell) => {
 			cell.prevValue = null;
@@ -265,6 +286,7 @@ export default function GameField() {
 	}
 
 	function cellTransitionEndHandler (){
+
 		setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)));
 		setisCellAppearance(true);
 		settransitionDirection('');
@@ -273,6 +295,7 @@ export default function GameField() {
 	return (
 		<div ref={gameWStatAndCanvasWrapper} className='GameField'>
 			{/* <div ref={gameWStatAndCanvasWrapper} className='gameWStatAndCanvasWrapper'> */}
+			<SettingsPanel volume={volume} setvolume={setvolume}/>
 			<ControlPanel newGameHAndler={newGameHAndler} toggleFullScreen={toggleFullScreen} fullScreenButtonValue={fullScreenButtonValue}/>
 
 				<CurrentGameStatistics

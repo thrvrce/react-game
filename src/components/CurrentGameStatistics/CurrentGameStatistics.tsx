@@ -1,15 +1,16 @@
 import React from "react";
 import './CurrentGameStatistics.css'
 import Indicator from "./Indicator/Indicator";
+import {insLeadZeroToTimer} from '../../Const/generalConsts'
 type props ={
 	score:number,
 	cellMerges:number,
 	movedCells: number,
 	gameTime: number,
 }
-function insLeadZeroToTimer (timeNumber: number){
-  return  (timeNumber < 10 ? "0" : "") + timeNumber.toString();
- }
+// function insLeadZeroToTimer (timeNumber: number){
+//   return  (timeNumber < 10 ? "0" : "") + timeNumber.toString();
+//  }
 
 export default function CurrentGameStatistics(props: props) {
 	return (

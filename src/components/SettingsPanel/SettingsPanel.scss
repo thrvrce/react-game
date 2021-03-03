@@ -1,0 +1,49 @@
+.SettingsWrapper{
+	display: flex;
+	flex-flow: column wrap;
+	justify-content: space-evenly;
+	width: 30rem;
+	margin-top: 1rem;
+	border-radius: 6px;
+	/* background: #1311094f; */
+	padding: 0.5rem;
+	background: #bbada0;
+
+	.settingsPanelName{
+		color: white;
+		font-weight: bold;
+		user-select: none;
+	}
+
+	.Parameters{
+		display: flex;
+		justify-content: space-evenly;
+		border: 2px solid white;
+		border-radius: 6px;
+
+		.parameter{
+			border-radius: 6px;
+			background: #e0a064;
+			color: white;
+			border-radius: 6px;
+			font-weight: bold;
+			padding: 0.5rem;
+
+
+
+			.settingControls{
+				display: flex;
+				justify-content: space-evenly;
+			}
+		}
+	}
+
+
+}
+
+.Volume {
+	width: 9rem;
+	.controlButton {
+		width: 30%;
+	}
+}
