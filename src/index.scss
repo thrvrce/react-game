@@ -36,7 +36,9 @@ $standartWhiteBorder: 2px solid white;
 *{
 	box-sizing: border-box;
 }
-
+html{
+	font-size: 13px;
+}
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -17,8 +17,8 @@ export default function SettingsPanel(props:any) {
 						{insLeadZeroToTimer(normalizeValue(props.volume)   * 10) }
 						<input type='button' value='-' className='controlButton' onClick={()=> props.setVolume( (prev:number) =>  prev > 0 ? normalizeValue(prev) - 0.1 : 0)}></input>
 					</div>
-					<input type='button' value={`Sound effects ${props.isEffectVolumeMuted  ?  'OFF' : 'ON'}`} className='controlButton' onClick={ ()=> props.setisEffectVolumeMuted( !props.isEffectVolumeMuted)}></input>
-					<input type='button' value={`Music effects ${props.ismusicVolumeMuted  ?  'OFF' : 'ON'}`} className='controlButton' onClick={()=> props.setismusicVolumeMuted(!props.ismusicVolumeMuted)}></input>
+					<input type='button' value={`Sound ${props.isEffectVolumeMuted  ?  'OFF' : 'ON'}`} className='controlButton' onClick={ ()=> props.setisEffectVolumeMuted( !props.isEffectVolumeMuted)}></input>
+					<input type='button' value={`Music ${props.ismusicVolumeMuted  ?  'OFF' : 'ON'}`} className='controlButton' onClick={()=> props.setismusicVolumeMuted(!props.ismusicVolumeMuted)}></input>
 				</div>
 				<div className='fieldSize parameter'> Field size
 					<div className='settingControls'>
