@@ -20,10 +20,13 @@ const transitionDown: string = 'daown';
 const transitionLeft: string = 'left';
 const transitionRight: string = 'right';
 
+const lengthBetweenCells: number = 100 / 85 *100; // соотношение длинны класса GameCanvas-CellBackground и GameCanvas-Cell.
+const saved2048GamesLC = 'saved2048Games';
+
 function insLeadZeroToTimer (timeNumber: number){
   return  (timeNumber < 10 ? "0" : "") + timeNumber.toString();
- }
-const lengthBetweenCells: number = 100 / 85 *100; // соотношение длинны класса GameCanvas-CellBackground и GameCanvas-Cell.
+}
+
 export {
 
 
@@ -49,6 +52,7 @@ export {
 	transitionRight,
 
 	lengthBetweenCells,
+	saved2048GamesLC,
 
 	insLeadZeroToTimer,
 }
