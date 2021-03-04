@@ -1,5 +1,4 @@
 import React from 'react'
-// import "./GameField.css";
 import ControlPanel from "./ControlPanel/ControlPanel";
 import CurrentGameStatistics from "./CurrentGameStatistics/CurrentGameStatistics";
 import GameCanvas from './GameCanvas/GameCanvas'
@@ -210,34 +209,6 @@ function saveGame (gameCells:gameCell[], score:number, cellMerges: number, moved
   localStorage.setItem(saved2048GamesLC, JSON.stringify(arrayOfSavedGames));
 }
 
-// function getInitialState() {
-//   let gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal:number, isEffectVolumeMuted: boolean, ismusicVolumeMuted: boolean, efectsVolume:number, musicVolume:number;
-//   const arrayOfSavedGames = getSavedGames();
-
-//   if (arrayOfSavedGames.length === 0) {
-//     gameCells = generateNewGame();
-//     musicVolume = efectsVolume = volume = gameTime = movedCells = cellMerges = score = 0 ;
-//     gameStartTime = new Date().toISOString();
-// 		fieldSize = 4;
-// 		goal = 2048;
-// 		isEffectVolumeMuted = ismusicVolumeMuted = false;
-//   } else {
-//     gameCells     = arrayOfSavedGames[0].gameCells
-//     score      		= arrayOfSavedGames[0].score
-//     cellMerges    = arrayOfSavedGames[0].cellMerges
-//     movedCells    = arrayOfSavedGames[0].movedCells
-//     gameTime      = arrayOfSavedGames[0].gameTime
-//     volume      	= arrayOfSavedGames[0].volume
-//     fieldSize     = arrayOfSavedGames[0].fieldSize
-//     gameStartTime = arrayOfSavedGames[0].gameStartTime
-// 		goal					= arrayOfSavedGames[0].goal;
-// 		isEffectVolumeMuted = arrayOfSavedGames[0].isEffectVolumeMuted;
-// 		ismusicVolumeMuted = arrayOfSavedGames[0].ismusicVolumeMuted
-// 		efectsVolume = arrayOfSavedGames[0].efectsVolume
-// 		musicVolume = arrayOfSavedGames[0].musicVolume
-//   }
-//   return {gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume}
-// }
 const getinitVolumeLevel = (type: string)=> {
 	const arrayOfSavedGames = getSavedGames();
 	if (arrayOfSavedGames.length === 0) {
@@ -313,9 +284,9 @@ export default function GameField() {
 	}, [volume, isEffectVolumeMuted, ismusicVolumeMuted])
 
   const keyDownHandler = React.useCallback((e: KeyboardEvent)=>{
-    console.log(e);
+
     if(cancalculateCelsNewState.current) {
-      // saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize) ;
+
       cancalculateCelsNewState.current = false;
       const cellTransitionDirection: string = getCellsTransitionDirection(e.key);
       if (directions.includes(cellTransitionDirection)) {
@@ -348,7 +319,7 @@ export default function GameField() {
         }
       }
     }
-  }, [gameCells, pointsSound, moveSound, noChangeSound, looseSound/*, volume, score, cellMerges, movedCells, gameTime, volume, fieldSize*/])
+  }, [gameCells, pointsSound, moveSound, noChangeSound, looseSound])
 
   const newGame = React.useCallback ( ()=> {
     clickSound();
@@ -362,29 +333,14 @@ export default function GameField() {
   }, [fieldSize, clickSound])
 
   React.useEffect(() => {
-    // const {gameCells, score, cellMerges, movedCells, gameTime, /*volume,*/ fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted} = getInitialState();
-    // setgameStartTime(gameStartTime);
-    // setscore(score)
-    // setcellMerges(cellMerges)
-    // setmovedCells(movedCells)
-    // setgameTime(gameTime)
-    // setfieldSize(fieldSize)
-    // setGameCells(gameCells)
-		// setgoal(goal);
-		// setisEffectVolumeMuted(isEffectVolumeMuted);
-		// setismusicVolumeMuted(ismusicVolumeMuted);
 		cancalculateCelsNewState.current = true;
-    // setVolume( volume) почему-то не устанавливало уровень звука в useEffect
   }, [])
 
 	React.useEffect( () => {
 		musicSound();
-		// setInterval(musicSound, duration ? duration : 1000)
-		// musicSound();
-	}, [musicSound, isPlaying])//isPlaying duration
+	}, [musicSound, isPlaying])
 
   React.useEffect(()=>{
-		console.log('mouse event effect')
     window.addEventListener('keydown',keyDownHandler);
     return () =>  window.removeEventListener('keydown',keyDownHandler);
   },[keyDownHandler])
