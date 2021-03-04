@@ -16,6 +16,7 @@ import click from'../sounds/click.mp3'
 import noChange from '../sounds/noChange.flac'
 import loose from '../sounds/loose.mp3'
 import victory from '../sounds/victory.wav'
+import music from '../sounds/music.mp3'
 
 
 const directions: string[] = [transitionUp,	transitionDown,	transitionLeft,	transitionRight]
@@ -197,8 +198,8 @@ function getSavedGames() {
   return savedGame ? JSON.parse(savedGame) : [];
 }
 
-function saveGame (gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal: number) {
-  const gameToSave = { gameCells, score, cellMerges, movedCells, gameTime,volume, fieldSize, gameStartTime, goal};
+function saveGame (gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal: number, isEffectVolumeMuted:boolean, ismusicVolumeMuted: boolean, efectsVolume:number, musicVolume:number) {
+  const gameToSave = { gameCells, score, cellMerges, movedCells, gameTime,volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume};
   const arrayOfSavedGames = getSavedGames();
 
   if (arrayOfSavedGames.length > 9) {
@@ -209,35 +210,57 @@ function saveGame (gameCells:gameCell[], score:number, cellMerges: number, moved
   localStorage.setItem(saved2048GamesLC, JSON.stringify(arrayOfSavedGames));
 }
 
-function getInitialState() {
-  let gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal:number;
-  const arrayOfSavedGames = getSavedGames();
+// function getInitialState() {
+//   let gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal:number, isEffectVolumeMuted: boolean, ismusicVolumeMuted: boolean, efectsVolume:number, musicVolume:number;
+//   const arrayOfSavedGames = getSavedGames();
 
-  if (arrayOfSavedGames.length === 0) {
-    gameCells = generateNewGame();
-    volume = gameTime = movedCells = cellMerges = score = 0 ;
-    gameStartTime = new Date().toISOString();
-		fieldSize = 4;
-		goal = 2048;
-  } else {
-    gameCells     = arrayOfSavedGames[0].gameCells
-    score      		= arrayOfSavedGames[0].score
-    cellMerges    = arrayOfSavedGames[0].cellMerges
-    movedCells    = arrayOfSavedGames[0].movedCells
-    gameTime      = arrayOfSavedGames[0].gameTime
-    volume      	= arrayOfSavedGames[0].volume
-    fieldSize     = arrayOfSavedGames[0].fieldSize
-    gameStartTime = arrayOfSavedGames[0].gameStartTime
-		goal					= arrayOfSavedGames[0].goal;
-  }
-  return {gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal}
-}
-const getinitVolumeLevel = ()=> {
+//   if (arrayOfSavedGames.length === 0) {
+//     gameCells = generateNewGame();
+//     musicVolume = efectsVolume = volume = gameTime = movedCells = cellMerges = score = 0 ;
+//     gameStartTime = new Date().toISOString();
+// 		fieldSize = 4;
+// 		goal = 2048;
+// 		isEffectVolumeMuted = ismusicVolumeMuted = false;
+//   } else {
+//     gameCells     = arrayOfSavedGames[0].gameCells
+//     score      		= arrayOfSavedGames[0].score
+//     cellMerges    = arrayOfSavedGames[0].cellMerges
+//     movedCells    = arrayOfSavedGames[0].movedCells
+//     gameTime      = arrayOfSavedGames[0].gameTime
+//     volume      	= arrayOfSavedGames[0].volume
+//     fieldSize     = arrayOfSavedGames[0].fieldSize
+//     gameStartTime = arrayOfSavedGames[0].gameStartTime
+// 		goal					= arrayOfSavedGames[0].goal;
+// 		isEffectVolumeMuted = arrayOfSavedGames[0].isEffectVolumeMuted;
+// 		ismusicVolumeMuted = arrayOfSavedGames[0].ismusicVolumeMuted
+// 		efectsVolume = arrayOfSavedGames[0].efectsVolume
+// 		musicVolume = arrayOfSavedGames[0].musicVolume
+//   }
+//   return {gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume}
+// }
+const getinitVolumeLevel = (type: string)=> {
 	const arrayOfSavedGames = getSavedGames();
 	if (arrayOfSavedGames.length === 0) {
-    return 0.5;
+    switch(type){
+			case 'gameStartTime': return new Date().toISOString();
+			case 'score' :
+			case 'cellMerges' :
+			case 'movedCells':
+			case 'gameTime' : return 0;
+
+			case 'fieldSize': return 4;
+			case 'gameCells': return generateNewGame();
+			case 'goal': return 2048;
+
+			case 'musicVolume' :
+			case 'efectsVolume' :
+			case 'volume' : return 0.5;
+
+			case 'isEffectVolumeMuted':
+			case 	'ismusicVolumeMuted': return false;
+		}
   } else {
-    return  arrayOfSavedGames[0].volume
+    return  arrayOfSavedGames[0][type];
   }
 }
 
@@ -245,31 +268,49 @@ function gameCellsHasValue(arr: gameCell[], value: number | null) {
 	return arr.findIndex( (cell) => cell.curValue === value ) !== -1;
 }
 export default function GameField() {
-  const [gameStartTime, setgameStartTime] = React.useState('')
-  const [score				, setscore] = React.useState(0);
-  const [cellMerges		, setcellMerges] = React.useState(0);
-  const [movedCells		, setmovedCells] = React.useState(0);
-  const [gameTime			, setgameTime] = React.useState(0);
-  const [fieldSize		, setfieldSize] = React.useState(4)
-  const [gameCells		, setGameCells] = React.useState(generateNewGame())
+  const [gameStartTime, setgameStartTime] = React.useState(getinitVolumeLevel('gameStartTime'))
+  const [score				, setscore] = React.useState(getinitVolumeLevel('score'));
+  const [cellMerges		, setcellMerges] = React.useState(getinitVolumeLevel('cellMerges'));
+  const [movedCells		, setmovedCells] = React.useState(getinitVolumeLevel('movedCells'));
+  const [gameTime			, setgameTime] = React.useState(getinitVolumeLevel('gameTime'));
+  const [fieldSize		, setfieldSize] = React.useState(getinitVolumeLevel('fieldSize'))
+  const [gameCells		, setGameCells] = React.useState(getinitVolumeLevel('gameCells'))
   const [fullScreenButtonValue, setfullScreenButtonValue] = React.useState<string>('Open in fullscreen');
   let [isCellAppearance, setisCellAppearance] = React.useState(true);
   let [transitionDirection, settransitionDirection] = React.useState('');
 	const [isAutoplay, setisAutoplay] = React.useState(false);
 	const [isShowMessage, setisShowMessage] = React.useState(false);
-	const [goal, setgoal] = React.useState(0);
+	const [goal, setgoal] = React.useState(getinitVolumeLevel('goal'));
 	const [message, setmessage] = React.useState('');
   let cancalculateCelsNewState = React.useRef(false);
   let gameWStatAndCanvasWrapper = React.useRef<HTMLDivElement>(null);
 
 
-  const [volume, setvolume] = React.useState(getinitVolumeLevel())
-  const [pointsSound] = useSound(points, {volume});
-  const [moveSound] = useSound(move, {volume});
-  const [clickSound] = useSound(click, {volume});
-  const [noChangeSound] = useSound(noChange, {volume});
-	const [looseSound] = useSound(loose, {volume});
-	const [victorySound] = useSound(victory, {volume});
+  const [volume, setVolume] = React.useState(getinitVolumeLevel('volume'))
+	const [efectsVolume, setfectsVolume] = React.useState(getinitVolumeLevel('efectsVolume'))
+	const [musicVolume, setmusicVolume] = React.useState(getinitVolumeLevel('musicVolume'))
+	const [isEffectVolumeMuted, setisEffectVolumeMuted] = React.useState(getinitVolumeLevel('isEffectVolumeMuted'))//todo load
+	const [ismusicVolumeMuted, setismusicVolumeMuted] = React.useState(getinitVolumeLevel('ismusicVolumeMuted'))//todo load
+  const [pointsSound] = useSound(points, {volume: efectsVolume});
+  const [moveSound] = useSound(move, {volume: efectsVolume});
+  const [clickSound] = useSound(click, {volume: efectsVolume});
+  const [noChangeSound] = useSound(noChange, {volume: efectsVolume});
+	const [looseSound] = useSound(loose, {volume: efectsVolume});
+	const [victorySound] = useSound(victory, {volume:efectsVolume});
+	const [musicSound, {isPlaying}] = useSound(music, {volume: musicVolume});
+
+	React.useEffect( ()=> {
+		if (isEffectVolumeMuted) {
+			setfectsVolume(0);
+		} else {
+			setfectsVolume(volume);
+		}
+		if (ismusicVolumeMuted) {
+			setmusicVolume(0);
+		}	else {
+			setmusicVolume(volume);
+		}
+	}, [volume, isEffectVolumeMuted, ismusicVolumeMuted])
 
   const keyDownHandler = React.useCallback((e: KeyboardEvent)=>{
     console.log(e);
@@ -282,9 +323,9 @@ export default function GameField() {
         if (isArrChanged) {
           setGameCells([...newArr])
           settransitionDirection(cellTransitionDirection);
-          setscore( (curValue) => curValue + points);
-          setcellMerges( (curValue) => curValue + cellMerges);
-          setmovedCells((curValue) => curValue + movedCells);
+          setscore( (curValue:number) => curValue + points);
+          setcellMerges( (curValue:number) => curValue + cellMerges);
+          setmovedCells((curValue:number) => curValue + movedCells);
           if (points) {
             pointsSound();
           } else {
@@ -321,18 +362,26 @@ export default function GameField() {
   }, [fieldSize, clickSound])
 
   React.useEffect(() => {
-    const {gameCells, score, cellMerges, movedCells, gameTime, /*volume,*/ fieldSize, gameStartTime, goal} = getInitialState();
-    setgameStartTime(gameStartTime);
-    setscore(score)
-    setcellMerges(cellMerges)
-    setmovedCells(movedCells)
-    setgameTime(gameTime)
-    setfieldSize(fieldSize)
-    setGameCells(gameCells)
-		setgoal(goal);
+    // const {gameCells, score, cellMerges, movedCells, gameTime, /*volume,*/ fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted} = getInitialState();
+    // setgameStartTime(gameStartTime);
+    // setscore(score)
+    // setcellMerges(cellMerges)
+    // setmovedCells(movedCells)
+    // setgameTime(gameTime)
+    // setfieldSize(fieldSize)
+    // setGameCells(gameCells)
+		// setgoal(goal);
+		// setisEffectVolumeMuted(isEffectVolumeMuted);
+		// setismusicVolumeMuted(ismusicVolumeMuted);
 		cancalculateCelsNewState.current = true;
-    // setvolume( volume) почему-то не устанавливало уровень звука в useEffect
+    // setVolume( volume) почему-то не устанавливало уровень звука в useEffect
   }, [])
+
+	React.useEffect( () => {
+		musicSound();
+		// setInterval(musicSound, duration ? duration : 1000)
+		// musicSound();
+	}, [musicSound, isPlaying])//isPlaying duration
 
   React.useEffect(()=>{
 		console.log('mouse event effect')
@@ -341,7 +390,7 @@ export default function GameField() {
   },[keyDownHandler])
 
   React.useEffect(()=>{
-    const timeIncrementInterval = setInterval(()=> setgameTime((curTime)=> Math.floor(curTime + 1)), 1000)
+    const timeIncrementInterval = setInterval(()=> setgameTime((curTime:number)=> Math.floor(curTime + 1)), 1000)
     return () =>  clearInterval(timeIncrementInterval);
   },[gameStartTime])
 
@@ -382,7 +431,7 @@ export default function GameField() {
       cell.path = 0;
       return cell;
     }));
-    saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal) ;
+    saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume) ;
 		if(gameCellsHasValue(gameCells, Number(goal))) {
 			victorySound();
 			if (isAutoplay) {
@@ -427,9 +476,14 @@ export default function GameField() {
     <div ref={gameWStatAndCanvasWrapper} className='GameField'>
       {/* <div ref={gameWStatAndCanvasWrapper} className='gameWStatAndCanvasWrapper'> */}
       <Message isShowMessage={isShowMessage} message={message} messageOkHandler={messageOkHandler}/>
-			<SettingsPanel volume={volume} setvolume={setvolume} fieldSize={fieldSize} fieldSizeSelecthandler={fieldSizeSelecthandler} goal={goal} goalHandler={goalHandler}/>
+			<SettingsPanel
+			volume={volume} setVolume={setVolume}
+			musicVolume={musicVolume} setmusicVolume={setmusicVolume}
+			isEffectVolumeMuted={isEffectVolumeMuted} setisEffectVolumeMuted={setisEffectVolumeMuted}
+			ismusicVolumeMuted={ismusicVolumeMuted} setismusicVolumeMuted={setismusicVolumeMuted}
+			fieldSize={fieldSize} fieldSizeSelecthandler={fieldSizeSelecthandler}
+			goal={goal} goalHandler={goalHandler}/>
       <ControlPanel newGameHAndler={newGameHAndler} toggleFullScreen={toggleFullScreen} fullScreenButtonValue={fullScreenButtonValue} autoplayHandler={autoplayHandler}/>
-
         <CurrentGameStatistics
           score={score}
           cellMerges={cellMerges}

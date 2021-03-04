@@ -5,17 +5,20 @@ function normalizeValue(value:number) {
 	return Math.round(value * 10) / 10;
 }
 
+
 export default function SettingsPanel(props:any) {
 	return(
 		<div className='SettingsWrapper'>
 			<div className='settingsPanelName'>Settings:</div>
 			<div className='Parameters'>
-				<div className='Volume parameter'> Volume level: {insLeadZeroToTimer(normalizeValue(props.volume)   * 10) }
+				<div className='Volume parameter'> Volume level
 					<div className='settingControls'>
-						<input type='button' value='+' className='controlButton ' onClick={()=> props.setvolume( (prev:number) =>  prev < 1 ? normalizeValue(prev) + 0.1 : 1)}></input>
-						<input type='button' value='-' className='controlButton' onClick={()=> props.setvolume( (prev:number) =>  prev > 0 ? normalizeValue(prev) - 0.1 : 0)}></input>
-						<input type='button' value={`${normalizeValue(props.volume)  ?  'OFF' : 'ON'}`} className='controlButton' onClick={()=> props.setvolume( (prev:number) =>  prev ? 0 : 0.5)}></input>
+						<input type='button' value='+' className='controlButton ' onClick={()=> props.setVolume( (prev:number) =>  prev < 1 ? normalizeValue(prev) + 0.1 : 1)}></input>
+						{insLeadZeroToTimer(normalizeValue(props.volume)   * 10) }
+						<input type='button' value='-' className='controlButton' onClick={()=> props.setVolume( (prev:number) =>  prev > 0 ? normalizeValue(prev) - 0.1 : 0)}></input>
 					</div>
+					<input type='button' value={`Sound effects ${props.isEffectVolumeMuted  ?  'OFF' : 'ON'}`} className='controlButton' onClick={ ()=> props.setisEffectVolumeMuted( !props.isEffectVolumeMuted)}></input>
+					<input type='button' value={`Music effects ${props.ismusicVolumeMuted  ?  'OFF' : 'ON'}`} className='controlButton' onClick={()=> props.setismusicVolumeMuted(!props.ismusicVolumeMuted)}></input>
 				</div>
 				<div className='fieldSize parameter'> Field size
 					<div className='settingControls'>

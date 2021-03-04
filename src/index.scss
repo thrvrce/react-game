@@ -175,13 +175,14 @@ footer{
 		.parameter{
 			@include standartText;
 			border-radius: $borderRadius;
-			background: #e0a064;
+			// background: #e0a064;
 			border-radius: $borderRadius;
 			padding: $stanadrtPadding;
 
 			.settingControls{
 				display: flex;
 				justify-content: space-evenly;
+				align-items: baseline;
 			}
 		}
 	}
@@ -191,7 +192,8 @@ footer{
 	width: 9rem;
 
 	.controlButton {
-		width: 30%;
+		width: 100%;
+		margin: 0.3rem;
 	}
 }
 
