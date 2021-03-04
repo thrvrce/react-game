@@ -35,21 +35,22 @@ function insertRandom2or4ValueToEmptyField(arr: gameCell[], numOfInserts: number
       arrOfFilledIndexes.push(index);
     }
   }
+	if (arrOfFilledIndexes.length !== arr.length) {
+		for(let i: number = 1; i <= numOfInserts; i += 1) {
+			let searcValue: boolean = true;
 
-  for(let i: number = 1; i <= numOfInserts; i += 1) {
-    let searcValue: boolean = true;
+			while(searcValue) {
+				let indexForInsert: number = getRandomNumber(fieldSize ** 2);
+				if(!arrOfFilledIndexes.includes(indexForInsert)) {
+					searcValue = false;
+					arrOfFilledIndexes.push(indexForInsert)
+					newGameCell.push({indexForInsert, gameCell: getRandom2Or4Value()});
+				}
+			}
+		}
+		newGameCell.forEach( (value) => arr[value.indexForInsert] = value.gameCell)
+	}
 
-    while(searcValue) {
-      let indexForInsert: number = getRandomNumber(fieldSize ** 2);
-      if(!arrOfFilledIndexes.includes(indexForInsert)) {
-        searcValue = false;
-        arrOfFilledIndexes.push(indexForInsert)
-        newGameCell.push({indexForInsert, gameCell: getRandom2Or4Value()});
-      }
-    }
-  }
-
-  newGameCell.forEach( (value) => arr[value.indexForInsert] = value.gameCell)
   return arr;
 }
 
@@ -243,9 +244,9 @@ export default function GameField() {
   const [moveSound] = useSound(move, {volume});
   const [clickSound] = useSound(click, {volume});
   const [noChangeSound] = useSound(noChange, {volume});
-	console.log('asd',volume)
+
   const keyDownHandler = React.useCallback((e: KeyboardEvent)=>{
-    console.log(volume,cancalculateCelsNewState.current,e);
+    console.log(e);
     if(cancalculateCelsNewState.current) {
       // saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize) ;
       cancalculateCelsNewState.current = false;
@@ -263,14 +264,17 @@ export default function GameField() {
           } else {
             moveSound();
           }
-        } else {
+        } else if (newArr.findIndex( (value) => value.curValue === null) === -1){
+					noChangeSound();
+					cancalculateCelsNewState.current = true;
+				} else {
           setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)))
           setisCellAppearance(true);
           noChangeSound();
         }
       }
     }
-  }, [gameCells, pointsSound, moveSound, noChangeSound, volume/*, score, cellMerges, movedCells, gameTime, volume, fieldSize*/])
+  }, [gameCells, pointsSound, moveSound, noChangeSound/*, volume, score, cellMerges, movedCells, gameTime, volume, fieldSize*/])
 
   const newGame = React.useCallback ( ()=> {
     clickSound();
@@ -284,7 +288,7 @@ export default function GameField() {
   }, [fieldSize, clickSound])
 
   React.useEffect(() => {
-    const {gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime} = getInitialState();
+    const {gameCells, score, cellMerges, movedCells, gameTime, /*volume,*/ fieldSize, gameStartTime} = getInitialState();
     setgameStartTime(gameStartTime);
     setscore(score)
     setcellMerges(cellMerges)
@@ -297,6 +301,7 @@ export default function GameField() {
   }, [])
 
   React.useEffect(()=>{
+		console.log('mouse event effect')
     window.addEventListener('keydown',keyDownHandler);
     return () =>  window.removeEventListener('keydown',keyDownHandler);
   },[keyDownHandler])
