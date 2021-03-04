@@ -22,6 +22,7 @@ const transitionRight: string = 'right';
 
 const lengthBetweenCells: number = 100 / 85 *100; // соотношение длинны класса GameCanvas-CellBackground и GameCanvas-Cell.
 const saved2048GamesLC = 'saved2048Games';
+const keyboardCeilsControlEvents: string[] = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
 
 function insLeadZeroToTimer (timeNumber: number){
   return  (timeNumber < 10 ? "0" : "") + timeNumber.toString();
@@ -53,6 +54,7 @@ export {
 
 	lengthBetweenCells,
 	saved2048GamesLC,
+	keyboardCeilsControlEvents,
 
 	insLeadZeroToTimer,
 }

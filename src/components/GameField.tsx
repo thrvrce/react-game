@@ -7,7 +7,7 @@ import SettingsPanel from './SettingsPanel/SettingsPanel'
 import useSound from 'use-sound';
 
 import {gameCell} from '../Const/generallInterfaces'
-import {transitionUp,	transitionDown,	transitionLeft,	transitionRight, saved2048GamesLC} from '../Const/generalConsts'
+import {transitionUp,	transitionDown,	transitionLeft,	transitionRight, saved2048GamesLC, keyboardCeilsControlEvents} from '../Const/generalConsts'
 
 import points from '../sounds/points.wav'
 import move from '../sounds/move.wav'
@@ -315,7 +315,7 @@ export default function GameField() {
     let interval: any;
     if (isAutoplay) {
       const getRandomKeyDownevent = ()=> {
-        return new KeyboardEvent('keydown', {key:['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'][getRandomNumber(4)]});
+        return new KeyboardEvent('keydown', {key: keyboardCeilsControlEvents[getRandomNumber(4)]});
       }
       interval = setInterval(() => window.dispatchEvent(getRandomKeyDownevent()) , 1000);
     }
@@ -363,7 +363,9 @@ export default function GameField() {
   }
 
   function autoplayHandler() {
-    newGame();
+    if (!isAutoplay) {
+			newGame();
+		}
     setisAutoplay(!isAutoplay);
   }
 
