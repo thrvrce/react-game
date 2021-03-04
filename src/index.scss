@@ -1,6 +1,7 @@
 $standartCellSize: 30rem;
 $borderRadius: 6px;
 $stanadrtPadding: 0.5rem;
+$standartWhiteBorder: 2px solid white;
 
 @mixin flexCentered{
 	display: flex;
@@ -13,6 +14,23 @@ $stanadrtPadding: 0.5rem;
 	width: $sideLenth;
 	height: $sideLenth;
 	border-radius: $borderRadius;
+}
+
+@mixin standartGamePanel {
+	display: flex;
+	border-radius: $borderRadius;
+	background: #bbada0;
+	margin-top: 1rem;
+	width: $standartCellSize;
+	flex-wrap: wrap;
+	padding: $stanadrtPadding;
+	justify-content: space-evenly;
+}
+
+@mixin standartText {
+	color: white;
+	font-weight: bold;
+	user-select: none;
 }
 
 *{
@@ -47,17 +65,16 @@ code {
 .controlButton:hover{
 	cursor: pointer;
 	opacity: 0.7;
-
 }
+
 .controlButton{
+	@include standartText;
 	display: flex;
 	flex-flow: column nowrap;
 	align-items: center;
 	padding: $stanadrtPadding;
 	background: #8f7a66;
-	color: white;
 	border-radius: $borderRadius;
-	font-weight: bold;
 	border: none;
 }
 
@@ -102,13 +119,18 @@ code {
 }
 
 .CurrentGameStatistics{
-	display: flex;
-	flex-flow:  row wrap ;
-	justify-content: space-around;
-	border-radius: $borderRadius;
-	background: #bbada0;
-	margin-top: 1rem;
-	width: $standartCellSize;
+	@include standartGamePanel;
+	flex-direction:  row;
+
+	.Indicator{
+		@include standartText;
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: center;
+		background: #bbada0;
+		border-radius: $borderRadius;
+		opacity: 0.8;
+	}
 }
 
 footer{
@@ -137,36 +159,25 @@ footer{
 	}
 }
 .SettingsWrapper{
-	display: flex;
-	flex-flow: column wrap;
-	justify-content: space-evenly;
-	width: $standartCellSize;
-	margin-top: 1rem;
-	border-radius: $borderRadius;
-	padding: $stanadrtPadding;
-	background: #bbada0;
+	@include standartGamePanel;
+	flex-direction: column;
 
 	.settingsPanelName{
-		color: white;
-		font-weight: bold;
-		user-select: none;
+		@include standartText;
 	}
 
 	.Parameters{
 		display: flex;
 		justify-content: space-evenly;
-		border: 2px solid white;
+		border: $standartWhiteBorder;
 		border-radius: $borderRadius;
 
 		.parameter{
+			@include standartText;
 			border-radius: $borderRadius;
 			background: #e0a064;
-			color: white;
 			border-radius: $borderRadius;
-			font-weight: bold;
 			padding: $stanadrtPadding;
-
-
 
 			.settingControls{
 				display: flex;
@@ -193,28 +204,28 @@ footer{
 	background: antiquewhite;
 }
 
-.Indicator{
-	display: flex;
-	flex-flow: column nowrap;
-	align-items: center;
-	padding: $stanadrtPadding;
-	background: #bbada0;
-	color: white;
-	border-radius: $borderRadius;
-	font-weight: bold;
-	user-select: none;
-	opacity: 0.8;
+.ControlPanel{
+	@include standartGamePanel;
+	flex-direction:  row;
 }
 
-.ControlPanel{
-	display: flex;
-	flex-flow:  row wrap ;
-	justify-content: space-evenly;
-	width: $standartCellSize;
-	margin-top: 1rem;
-	border-radius: $borderRadius;
-	padding: $stanadrtPadding;
-	background: #bbada0;
+.Message {
+	@include standartGamePanel;
+	flex-direction: column;
+	position: absolute;
+	top: -6rem;
+	border: $standartWhiteBorder;
+	width: 28rem;
+	z-index: 100;
+	// transform: translate(0%, -150%);
+	// transform: translate(0%, 750%);
+	transition: transform 1s;
+
+
+	.MessageTitle{
+		@include standartText;
+		text-align: center;
+	}
 }
 
 @keyframes gamefieldLoad {

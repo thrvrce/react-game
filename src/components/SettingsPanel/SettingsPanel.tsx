@@ -29,6 +29,25 @@ export default function SettingsPanel(props:any) {
 						</select>
 					</div>
 				</div>
+				<div className='goal parameter'> Current goal
+					<div className='settingControls'>
+						<select name="goal" className='controlButton ' value={props.goal} onChange={(e) => props.goalHandler(e.target.value)}>
+							<option value={16}>16</option>
+							<option value={32}>32</option>
+							<option value={64}>64</option>
+							<option value={128}>128</option>
+							<option value={256}>256</option>
+							<option value={512}>512</option>
+							<option value={1024}>1024</option>
+							<option value={2048}>2048</option>
+							<option value={4096}>4096</option>
+							<option value={8192}>8192</option>
+							<option value={16384}>16384</option>
+							<option value={32768}>32768</option>
+							<option value={65536}>65536</option>
+						</select>
+					</div>
+				</div>
 			</div>
 		</div>
 	)

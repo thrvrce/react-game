@@ -4,6 +4,7 @@ import ControlPanel from "./ControlPanel/ControlPanel";
 import CurrentGameStatistics from "./CurrentGameStatistics/CurrentGameStatistics";
 import GameCanvas from './GameCanvas/GameCanvas'
 import SettingsPanel from './SettingsPanel/SettingsPanel'
+import Message from './Message/Message'
 import useSound from 'use-sound';
 
 import {gameCell} from '../Const/generallInterfaces'
@@ -13,6 +14,8 @@ import points from '../sounds/points.wav'
 import move from '../sounds/move.wav'
 import click from'../sounds/click.mp3'
 import noChange from '../sounds/noChange.flac'
+import loose from '../sounds/loose.mp3'
+import victory from '../sounds/victory.wav'
 
 
 const directions: string[] = [transitionUp,	transitionDown,	transitionLeft,	transitionRight]
@@ -194,8 +197,8 @@ function getSavedGames() {
   return savedGame ? JSON.parse(savedGame) : [];
 }
 
-function saveGame (gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string) {
-  const gameToSave = { gameCells, score, cellMerges, movedCells, gameTime,volume, fieldSize, gameStartTime};
+function saveGame (gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal: number) {
+  const gameToSave = { gameCells, score, cellMerges, movedCells, gameTime,volume, fieldSize, gameStartTime, goal};
   const arrayOfSavedGames = getSavedGames();
 
   if (arrayOfSavedGames.length > 9) {
@@ -207,13 +210,14 @@ function saveGame (gameCells:gameCell[], score:number, cellMerges: number, moved
 }
 
 function getInitialState() {
-  let gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string;
+  let gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal:number;
   const arrayOfSavedGames = getSavedGames();
 
   if (arrayOfSavedGames.length === 0) {
     gameCells = generateNewGame();
     fieldSize = volume = gameTime = movedCells = cellMerges = score = 0 ;
     gameStartTime = new Date().toISOString();
+		goal = 2048;
   } else {
     gameCells     = arrayOfSavedGames[0].gameCells
     score      		= arrayOfSavedGames[0].score
@@ -223,8 +227,9 @@ function getInitialState() {
     volume      	= arrayOfSavedGames[0].volume
     fieldSize     = arrayOfSavedGames[0].fieldSize
     gameStartTime = arrayOfSavedGames[0].gameStartTime
+		goal					= arrayOfSavedGames[0].goal;
   }
-  return {gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime}
+  return {gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal}
 }
 const getinitVolumeLevel = ()=> {
 	const arrayOfSavedGames = getSavedGames();
@@ -235,6 +240,9 @@ const getinitVolumeLevel = ()=> {
   }
 }
 
+function gameCellsHasValue(arr: gameCell[], value: number | null) {
+	return arr.findIndex( (cell) => cell.curValue === value ) !== -1;
+}
 export default function GameField() {
   const [gameStartTime, setgameStartTime] = React.useState('')
   const [score				, setscore] = React.useState(0);
@@ -246,15 +254,21 @@ export default function GameField() {
   const [fullScreenButtonValue, setfullScreenButtonValue] = React.useState<string>('Open in fullscreen');
   let [isCellAppearance, setisCellAppearance] = React.useState(true);
   let [transitionDirection, settransitionDirection] = React.useState('');
+	const [isAutoplay, setisAutoplay] = React.useState(false);
+	const [isShowMessage, setisShowMessage] = React.useState(false);
+	const [goal, setgoal] = React.useState(0);
+	const [message, setmessage] = React.useState('');
   let cancalculateCelsNewState = React.useRef(false);
   let gameWStatAndCanvasWrapper = React.useRef<HTMLDivElement>(null);
-  const [isAutoplay, setisAutoplay] = React.useState(false);
+
 
   const [volume, setvolume] = React.useState(getinitVolumeLevel())
   const [pointsSound] = useSound(points, {volume});
   const [moveSound] = useSound(move, {volume});
   const [clickSound] = useSound(click, {volume});
   const [noChangeSound] = useSound(noChange, {volume});
+	const [looseSound] = useSound(loose, {volume});
+	const [victorySound] = useSound(victory, {volume});
 
   const keyDownHandler = React.useCallback((e: KeyboardEvent)=>{
     console.log(e);
@@ -275,13 +289,14 @@ export default function GameField() {
           } else {
             moveSound();
           }
-        } else if (newArr.findIndex( (value) => value.curValue === null) === -1){
+        } else if (!gameCellsHasValue(gameCells, null)){
 					if (solvabilityСheck(gameCells)) {
 						noChangeSound();
 						cancalculateCelsNewState.current = true;
 					} else {
-						console.log('you loose');
-						noChangeSound();
+						setmessage('You loose (no available moves)');
+						setisShowMessage(true);
+						looseSound();
 						cancalculateCelsNewState.current = true;
 					}
 				} else {
@@ -291,7 +306,7 @@ export default function GameField() {
         }
       }
     }
-  }, [gameCells, pointsSound, moveSound, noChangeSound/*, volume, score, cellMerges, movedCells, gameTime, volume, fieldSize*/])
+  }, [gameCells, pointsSound, moveSound, noChangeSound, looseSound/*, volume, score, cellMerges, movedCells, gameTime, volume, fieldSize*/])
 
   const newGame = React.useCallback ( ()=> {
     clickSound();
@@ -305,7 +320,7 @@ export default function GameField() {
   }, [fieldSize, clickSound])
 
   React.useEffect(() => {
-    const {gameCells, score, cellMerges, movedCells, gameTime, /*volume,*/ fieldSize, gameStartTime} = getInitialState();
+    const {gameCells, score, cellMerges, movedCells, gameTime, /*volume,*/ fieldSize, gameStartTime, goal} = getInitialState();
     setgameStartTime(gameStartTime);
     setscore(score)
     setcellMerges(cellMerges)
@@ -313,6 +328,7 @@ export default function GameField() {
     setgameTime(gameTime)
     setfieldSize(fieldSize)
     setGameCells(gameCells)
+		setgoal(goal);
 		cancalculateCelsNewState.current = true;
     // setvolume( volume) почему-то не устанавливало уровень звука в useEffect
   }, [])
@@ -365,8 +381,20 @@ export default function GameField() {
       cell.path = 0;
       return cell;
     }));
-    saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime) ;
-    cancalculateCelsNewState.current = true;
+    saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal) ;
+		if(gameCellsHasValue(gameCells, Number(goal))) {
+			victorySound();
+			if (isAutoplay) {
+				setisAutoplay(false)
+				setmessage(`Wow, autoplay reach ${goal}!`);
+			} else {
+				setmessage(`Goal ${goal} reached! Try change goal and continue`);
+			}
+			setisShowMessage(true);
+		} else {
+
+		}
+		cancalculateCelsNewState.current = true;
   }
 
   function cellTransitionEndHandler (){
@@ -386,10 +414,19 @@ export default function GameField() {
     setisAutoplay(!isAutoplay);
   }
 
+	function messageOkHandler() {
+		setmessage('');
+		setisShowMessage(false);
+	}
+
+	function goalHandler(newGoal: number) {
+		setgoal(newGoal);
+	}
   return (
     <div ref={gameWStatAndCanvasWrapper} className='GameField'>
       {/* <div ref={gameWStatAndCanvasWrapper} className='gameWStatAndCanvasWrapper'> */}
-      <SettingsPanel volume={volume} setvolume={setvolume} fieldSize={fieldSize} fieldSizeSelecthandler={fieldSizeSelecthandler} />
+      <Message isShowMessage={isShowMessage} message={message} messageOkHandler={messageOkHandler}/>
+			<SettingsPanel volume={volume} setvolume={setvolume} fieldSize={fieldSize} fieldSizeSelecthandler={fieldSizeSelecthandler} goal={goal} goalHandler={goalHandler}/>
       <ControlPanel newGameHAndler={newGameHAndler} toggleFullScreen={toggleFullScreen} fullScreenButtonValue={fullScreenButtonValue} autoplayHandler={autoplayHandler}/>
 
         <CurrentGameStatistics

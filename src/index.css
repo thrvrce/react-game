@@ -36,6 +36,12 @@ code {
 }
 
 .controlButton {
+  color: white;
+  font-weight: bold;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -48,9 +54,7 @@ code {
           align-items: center;
   padding: 0.5rem;
   background: #8f7a66;
-  color: white;
   border-radius: 6px;
-  font-weight: bold;
   border: none;
 }
 
@@ -177,16 +181,42 @@ code {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
   border-radius: 6px;
   background: #bbada0;
   margin-top: 1rem;
   width: 30rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  padding: 0.5rem;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.CurrentGameStatistics .Indicator {
+  color: white;
+  font-weight: bold;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: #bbada0;
+  border-radius: 6px;
+  opacity: 0.8;
 }
 
 footer {
@@ -229,18 +259,20 @@ footer div {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-flow: column wrap;
-          flex-flow: column wrap;
+  border-radius: 6px;
+  background: #bbada0;
+  margin-top: 1rem;
+  width: 30rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  padding: 0.5rem;
   -webkit-box-pack: space-evenly;
       -ms-flex-pack: space-evenly;
           justify-content: space-evenly;
-  width: 30rem;
-  margin-top: 1rem;
-  border-radius: 6px;
-  padding: 0.5rem;
-  background: #bbada0;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .SettingsWrapper .settingsPanelName {
@@ -264,11 +296,15 @@ footer div {
 }
 
 .SettingsWrapper .Parameters .parameter {
+  color: white;
+  font-weight: bold;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   border-radius: 6px;
   background: #e0a064;
-  color: white;
   border-radius: 6px;
-  font-weight: bold;
   padding: 0.5rem;
 }
 
@@ -305,45 +341,63 @@ footer div {
   background: antiquewhite;
 }
 
-.Indicator {
+.ControlPanel {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  border-radius: 6px;
+  background: #bbada0;
+  margin-top: 1rem;
+  width: 30rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  padding: 0.5rem;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.Message {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border-radius: 6px;
+  background: #bbada0;
+  margin-top: 1rem;
+  width: 30rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  padding: 0.5rem;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-flow: column nowrap;
-          flex-flow: column nowrap;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 0.5rem;
-  background: #bbada0;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: absolute;
+  top: -6rem;
+  border: 2px solid white;
+  width: 20rem;
+  z-index: 100;
+  -webkit-transition: -webkit-transform 1s;
+  transition: -webkit-transform 1s;
+  transition: transform 1s;
+  transition: transform 1s, -webkit-transform 1s;
+}
+
+.Message .MessageTitle {
   color: white;
-  border-radius: 6px;
   font-weight: bold;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  opacity: 0.8;
-}
-
-.ControlPanel {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
-  -webkit-box-pack: space-evenly;
-      -ms-flex-pack: space-evenly;
-          justify-content: space-evenly;
-  width: 30rem;
-  margin-top: 1rem;
-  border-radius: 6px;
-  padding: 0.5rem;
-  background: #bbada0;
+  text-align: center;
 }
 
 @-webkit-keyframes gamefieldLoad {
