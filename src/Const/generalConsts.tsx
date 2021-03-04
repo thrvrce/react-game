@@ -1,4 +1,4 @@
-const colorForEmty: string = 'rgba(238, 228, 218, 0.35)';
+const colorForEmty: string = 'rgba(0, 0, 0, 0)';//прозрачный цвет :D
 const colorFor2: string = '#eee4da';
 const colorFor4: string = '#eee1c9';
 const colorFor8: string = '#f3b27a';
