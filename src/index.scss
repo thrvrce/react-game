@@ -1,11 +1,25 @@
+$standartCellSize: 30rem;
+$borderRadius: 6px;
+$stanadrtPadding: 0.5rem;
+
+@mixin flexCentered{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@mixin commonCellStyle($sideLenth) {
+	@include flexCentered;
+	width: $sideLenth;
+	height: $sideLenth;
+	border-radius: $borderRadius;
+}
+
 *{
 	box-sizing: border-box;
 }
+
 body {
-  // margin: 0;
-  // font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  //   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  //   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 	font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
@@ -14,7 +28,7 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
 }
 
 #root{
@@ -22,8 +36,12 @@ code {
 	justify-content: center;
 }
 
-.controlButton:focus{
+.controlButton:focus,
+.controlButton:active,
+.controlButton
+{
 	border: none;
+	outline: none;
 }
 
 .controlButton:hover{
@@ -35,36 +53,19 @@ code {
 	display: flex;
 	flex-flow: column nowrap;
 	align-items: center;
-	// flex-grow: 1;
-	// flex-shrink: 1;
-	// margin-top: 1rem;
-	padding: 0.5rem;
+	padding: $stanadrtPadding;
 	background: #8f7a66;
 	color: white;
-	border-radius: 6px;
+	border-radius: $borderRadius;
 	font-weight: bold;
 	border: none;
 }
 
 .mainContent{
 	background: antiquewhite;
-	border-radius: 6px;
+	border-radius: $borderRadius;
 	animation-name: gamefieldLoad;
   animation-duration: 1s;
-}
-$standartCellSize: 30rem;
-$borderRadius: 6px;
-
-@mixin flexCentered{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-@mixin commonCellStyle($sideLenth) {
-	@include flexCentered;
-	width: $sideLenth;
-	height: $sideLenth;
-	border-radius: $borderRadius;
 }
 
 .GameCanvas{
@@ -89,10 +90,6 @@ $borderRadius: 6px;
 		font-weight: bold;
 		font-size: 2rem;
 		user-select: none;
-		// transform: translate(118%, 0%);
-		// transition: transform 3s;
-		// transition: background-color 1s;
-		// animation: insertNewCells .3s linear;
 	}
 
 	@keyframes insertNewCells {
@@ -103,14 +100,15 @@ $borderRadius: 6px;
 		100% {transform: scale(1); }
 	}
 }
+
 .CurrentGameStatistics{
 	display: flex;
 	flex-flow:  row wrap ;
 	justify-content: space-around;
-	border-radius: 6px;
+	border-radius: $borderRadius;
 	background: #bbada0;
 	margin-top: 1rem;
-	width: 30rem;
+	width: $standartCellSize;
 }
 
 footer{
@@ -119,15 +117,15 @@ footer{
 	align-items: center;
 	background: rgb(243, 178, 122);
 	margin-top: 1rem;
-	border-radius: 6px;
+	border-radius: $borderRadius;
 
 	a{
 		text-decoration: none;
 	}
 
 	img{
-		 width: 40px;
-		 height: 40px;
+		width: 40px;
+		height: 40px;
 	 }
 
 	 div{
@@ -142,11 +140,10 @@ footer{
 	display: flex;
 	flex-flow: column wrap;
 	justify-content: space-evenly;
-	width: 30rem;
+	width: $standartCellSize;
 	margin-top: 1rem;
-	border-radius: 6px;
-	/* background: #1311094f; */
-	padding: 0.5rem;
+	border-radius: $borderRadius;
+	padding: $stanadrtPadding;
 	background: #bbada0;
 
 	.settingsPanelName{
@@ -159,15 +156,15 @@ footer{
 		display: flex;
 		justify-content: space-evenly;
 		border: 2px solid white;
-		border-radius: 6px;
+		border-radius: $borderRadius;
 
 		.parameter{
-			border-radius: 6px;
+			border-radius: $borderRadius;
 			background: #e0a064;
 			color: white;
-			border-radius: 6px;
+			border-radius: $borderRadius;
 			font-weight: bold;
-			padding: 0.5rem;
+			padding: $stanadrtPadding;
 
 
 
@@ -177,73 +174,50 @@ footer{
 			}
 		}
 	}
-
-
 }
 
 .Volume {
 	width: 9rem;
+
 	.controlButton {
 		width: 30%;
 	}
+}
+
+.GameField{
+	display: flex;
+	flex-flow: column wrap;
+	align-items: center;
+	overflow: hidden;
+	border-radius: $borderRadius;
+	background: antiquewhite;
 }
 
 .Indicator{
 	display: flex;
 	flex-flow: column nowrap;
 	align-items: center;
-	// flex-grow: 1;
-	// flex-shrink: 1;
-	// margin: 1rem;
-	padding: 0.5rem;
+	padding: $stanadrtPadding;
 	background: #bbada0;
 	color: white;
-	border-radius: 3px;
+	border-radius: $borderRadius;
 	font-weight: bold;
 	user-select: none;
 	opacity: 0.8;
 }
+
 .ControlPanel{
 	display: flex;
 	flex-flow:  row wrap ;
 	justify-content: space-evenly;
-	// padding: 1rem;
-	// background-color: white;
-	width: 30rem;
+	width: $standartCellSize;
 	margin-top: 1rem;
-	border-radius: 6px;
-	/* background: #1311094f; */
-	padding: 0.5rem;
+	border-radius: $borderRadius;
+	padding: $stanadrtPadding;
 	background: #bbada0;
-	// .controlButton:hover{
-	// 	cursor: pointer;
-	// 	opacity: 0.7;
-
-	// }
-
-	// .controlButton:focus{
-	// 	border: none;
-	// }
-	// .controlButton{
-  //   display: flex;
-  //   flex-flow: column nowrap;
-  //   align-items: center;
-  //   // flex-grow: 1;
-  //   // flex-shrink: 1;
-  //   // margin-top: 1rem;
-  //   padding: 0.5rem;
-  //   background: #8f7a66;
-  //   color: white;
-  //   border-radius: 6px;
-  //   font-weight: bold;
-	// 	border: none;
-	// }
-
-
 }
 
 @keyframes gamefieldLoad {
 	from{ transform: scale(0)}
 	to{transform: scale(1)}
-
 }

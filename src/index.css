@@ -23,8 +23,11 @@ code {
           justify-content: center;
 }
 
-.controlButton:focus {
+.controlButton:focus,
+.controlButton:active,
+.controlButton {
   border: none;
+  outline: none;
 }
 
 .controlButton:hover {
@@ -236,7 +239,6 @@ footer div {
   width: 30rem;
   margin-top: 1rem;
   border-radius: 6px;
-  /* background: #1311094f; */
   padding: 0.5rem;
   background: #bbada0;
 }
@@ -287,6 +289,22 @@ footer div {
   width: 30%;
 }
 
+.GameField {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column wrap;
+          flex-flow: column wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  overflow: hidden;
+  border-radius: 6px;
+  background: antiquewhite;
+}
+
 .Indicator {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -301,7 +319,7 @@ footer div {
   padding: 0.5rem;
   background: #bbada0;
   color: white;
-  border-radius: 3px;
+  border-radius: 6px;
   font-weight: bold;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -324,7 +342,6 @@ footer div {
   width: 30rem;
   margin-top: 1rem;
   border-radius: 6px;
-  /* background: #1311094f; */
   padding: 0.5rem;
   background: #bbada0;
 }
