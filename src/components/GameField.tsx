@@ -15,7 +15,7 @@ import click from'../sounds/click.mp3'
 import noChange from '../sounds/noChange.flac'
 
 
-const Events: string[] = [transitionUp,	transitionDown,	transitionLeft,	transitionRight]
+const directions: string[] = [transitionUp,	transitionDown,	transitionLeft,	transitionRight]
 
 function getRandomNumber(maxValue: number): number{
   return Math.floor(Math.random() * maxValue);
@@ -73,7 +73,8 @@ function generateNewGame(fieldSize : number = 4): gameCell[]{
 }
 
 function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string) :{isArrChanged: boolean, newArr :gameCell[], points: number, cellMerges: number, movedCells: number}{
-  const newArr = gameCellsToChange;
+  const newArr:gameCell[] = JSON.parse(JSON.stringify(gameCellsToChange));
+	console.log(newArr === gameCellsToChange)
   let isArrChanged: boolean = false;
   let points: number = 0;
   let cellMerges : number = 0;
@@ -167,6 +168,16 @@ function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string)
   return { isArrChanged, newArr, points, cellMerges, movedCells};
 }
 
+function solvabilityСheck (arrForChec: gameCell[]) {
+	for (let index = 0; index < directions.length; index++) {
+		const {isArrChanged} = calculateNewCellsState(arrForChec, directions[index]);
+		if (isArrChanged) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function getCellsTransitionDirection(eventName: string): string {
 
   switch(eventName){
@@ -251,7 +262,7 @@ export default function GameField() {
       // saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize) ;
       cancalculateCelsNewState.current = false;
       const cellTransitionDirection: string = getCellsTransitionDirection(e.key);
-      if (Events.includes(cellTransitionDirection)) {
+      if (directions.includes(cellTransitionDirection)) {
         const {isArrChanged, newArr, points, cellMerges, movedCells } = calculateNewCellsState(gameCells, cellTransitionDirection);
         if (isArrChanged) {
           setGameCells([...newArr])
@@ -265,8 +276,14 @@ export default function GameField() {
             moveSound();
           }
         } else if (newArr.findIndex( (value) => value.curValue === null) === -1){
-					noChangeSound();
-					cancalculateCelsNewState.current = true;
+					if (solvabilityСheck(gameCells)) {
+						noChangeSound();
+						cancalculateCelsNewState.current = true;
+					} else {
+						console.log('you loose');
+						noChangeSound();
+						cancalculateCelsNewState.current = true;
+					}
 				} else {
           setGameCells(insertRandom2or4ValueToEmptyField(gameCells, 1, Math.sqrt(gameCells.length)))
           setisCellAppearance(true);
