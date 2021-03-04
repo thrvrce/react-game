@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import './GameCanvas.css'
+// import './GameCanvas.css'
 import {gameCell} from '../../Const/generallInterfaces'
 import { cellValueColorBelow8, cellValueColorMore8, colorForEmty, colorFor2, colorFor4, colorFor8, colorFor16,	colorFor32,	colorFor64,	colorFor128, colorFor256,colorFor512,
 	colorFor1024,

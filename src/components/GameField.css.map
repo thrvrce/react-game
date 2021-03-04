@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,UAAU,CAAA;EACT,OAAO,EAAE,IAAI;EACb,SAAS,EAAE,WAAW;EACtB,WAAW,EAAE,MAAM;EACnB,QAAQ,EAAE,MAAM;EAChB,aAAa,EAAE,GAAG;EAIlB,UAAU,EAAE,YAAY;CACxB",
-    "sources": [
-        "GameField.scss"
-    ],
-    "names": [],
-    "file": "GameField.css"
-}

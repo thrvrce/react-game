@@ -1,5 +1,5 @@
 import React from 'react'
-import './SettingsPanel.css'
+// import './SettingsPanel.css'
 import {insLeadZeroToTimer} from '../../Const/generalConsts'
 function normalizeValue(value:number) {
 	return Math.round(value * 10) / 10;

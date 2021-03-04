@@ -1,5 +1,5 @@
 import React from 'react'
-import './foter.css'
+// import './foter.css'
 import schoolLogo from './rs_school_js.svg'
 import githubLogo from './github.png'
 

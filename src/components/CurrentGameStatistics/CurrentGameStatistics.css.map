@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,sBAAsB,CAAA;EACrB,OAAO,EAAE,IAAI;EACb,SAAS,EAAG,QAAS;EACrB,eAAe,EAAE,YAAY;EAC7B,aAAa,EAAE,GAAG;EAClB,UAAU,EAAE,OAAO;EACnB,UAAU,EAAE,IAAI;EAChB,KAAK,EAAE,KAAK;CACZ",
-    "sources": [
-        "CurrentGameStatistics.scss"
-    ],
-    "names": [],
-    "file": "CurrentGameStatistics.css"
-}

@@ -1,5 +1,5 @@
 import React from "react";
-import './CurrentGameStatistics.css'
+// import './CurrentGameStatistics.css'
 import Indicator from "./Indicator/Indicator";
 import {insLeadZeroToTimer} from '../../Const/generalConsts'
 type props ={

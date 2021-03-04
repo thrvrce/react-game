@@ -1,5 +1,5 @@
 import React from 'react'
-import "./GameField.css";
+// import "./GameField.css";
 import ControlPanel from "./ControlPanel/ControlPanel";
 import CurrentGameStatistics from "./CurrentGameStatistics/CurrentGameStatistics";
 import GameCanvas from './GameCanvas/GameCanvas'

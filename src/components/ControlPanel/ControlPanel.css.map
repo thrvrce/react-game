@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,aAAa,CAAA;EACZ,OAAO,EAAE,IAAI;EACb,SAAS,EAAG,QAAS;EACrB,eAAe,EAAE,YAAY;EAG7B,KAAK,EAAE,KAAK;EACZ,UAAU,EAAE,IAAI;EAChB,aAAa,EAAE,GAAG;EAClB,4BAA4B;EAC5B,OAAO,EAAE,MAAM;EACf,UAAU,EAAE,OAAO;CA0BnB",
-    "sources": [
-        "ControlPanel.scss"
-    ],
-    "names": [],
-    "file": "ControlPanel.css"
-}

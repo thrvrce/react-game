@@ -1,5 +1,5 @@
 import React from 'react'
-import './Indicator.css'
+// import './Indicator.css'
 
 interface Props {
 	name: string,
