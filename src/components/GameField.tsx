@@ -71,8 +71,6 @@ function generateNewGame(fieldSize : number = 4): gameCell[]{
 	return array;
 }
 
-
-
 function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string) :{isArrChanged: boolean, newArr :gameCell[], points: number, cellMerges: number, movedCells: number}{
 	const newArr = gameCellsToChange;
 	let isArrChanged: boolean = false;
@@ -124,56 +122,46 @@ function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string)
 
 	for (let curColumnIndex = mainAxisStartIndex; curColumnIndex <= mainAxisLastIndex; curColumnIndex += mainAxisOffset) {
 		const testArr = [];
-
 		for (let iteration = 0; iteration < size; iteration++) {
 			testArr.push(curColumnIndex + crossAxisOffset * iteration)
 		}
-
-			for (let srcCellIndexForMove = curColumnIndex + crossAxisOffset; testArr.includes(srcCellIndexForMove); srcCellIndexForMove += crossAxisOffset) {
-
-				let curCheckRowNumber: number = 0;
-				let processAnalysis: boolean = true;
-
-				while(processAnalysis) {
-					const srcCellIndex: number = srcCellIndexForMove - (curCheckRowNumber * crossAxisOffset);
-					const srcCell: gameCell = newArr[srcCellIndex];
-
-					const dstCellIndex:number = srcCellIndex - crossAxisOffset;
-					const dstCell:gameCell = newArr[dstCellIndex];
-
-
-					if (!srcCell || !dstCell || !testArr.includes(srcCellIndex) || !testArr.includes(dstCellIndex)) {
-						break;
-					}
-
-					if ( srcCell.curValue ){
-						if (dstCell !== undefined && (dstCell.curValue === null || (dstCell.curValue === srcCell.curValue && dstCell.isUpdatedOrNew === false && srcCell.isUpdatedOrNew === false))){
-
-							if (dstCell.curValue === null) {
-								dstCell.curValue = 	srcCell.curValue;
-							} else {
-								dstCell.curValue = dstCell.curValue * 2 ;
-								dstCell.isUpdatedOrNew = true;
-								points = +dstCell.curValue;
-								cellMerges += 1;
-							}
-
-							srcCell.curValue = null;
-							newArr[srcCellIndexForMove].path += 1;
-							curCheckRowNumber += 1;
-							isArrChanged = true;
-						} else {
-							processAnalysis = false;
-						}
-				} else {
-					curCheckRowNumber += 1;
+		for (let srcCellIndexForMove = curColumnIndex + crossAxisOffset; testArr.includes(srcCellIndexForMove); srcCellIndexForMove += crossAxisOffset) {
+			let curCheckRowNumber: number = 0;
+			let processAnalysis: boolean = true;
+			while(processAnalysis) {
+				const srcCellIndex: number = srcCellIndexForMove - (curCheckRowNumber * crossAxisOffset);
+				const srcCell: gameCell = newArr[srcCellIndex];
+				const dstCellIndex:number = srcCellIndex - crossAxisOffset;
+				const dstCell:gameCell = newArr[dstCellIndex];
+				if (!srcCell || !dstCell || !testArr.includes(srcCellIndex) || !testArr.includes(dstCellIndex)) {
+					break;
 				}
-			}
-
-			if (newArr[srcCellIndexForMove].path > 0) {
-				movedCells +=1
+				if ( srcCell.curValue ){
+					if (dstCell !== undefined && (dstCell.curValue === null || (dstCell.curValue === srcCell.curValue && dstCell.isUpdatedOrNew === false && srcCell.isUpdatedOrNew === false))){
+						if (dstCell.curValue === null) {
+							dstCell.curValue = 	srcCell.curValue;
+						} else {
+							dstCell.curValue = dstCell.curValue * 2 ;
+							dstCell.isUpdatedOrNew = true;
+							points = +dstCell.curValue;
+							cellMerges += 1;
+						}
+						srcCell.curValue = null;
+						newArr[srcCellIndexForMove].path += 1;
+						curCheckRowNumber += 1;
+						isArrChanged = true;
+					} else {
+						processAnalysis = false;
+					}
+			} else {
+				curCheckRowNumber += 1;
 			}
 		}
+
+		if (newArr[srcCellIndexForMove].path > 0) {
+			movedCells +=1
+		}
+	}
 	}
 	return { isArrChanged, newArr, points, cellMerges, movedCells};
 }
@@ -190,7 +178,6 @@ function getCellsTransitionDirection(eventName: string): string {
 }
 
 function saveGame (gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number) {
-	// localStorage.getItem('2048game')
 	const savedGame = { gameCells, score, cellMerges, movedCells, gameTime,volume,};
 	localStorage.setItem('2048game', JSON.stringify(savedGame));
 
@@ -233,11 +220,8 @@ export default function GameField() {
 			saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize) ;
 			cancalculateCelsNewState.current = false;
 			const cellTransitionDirection: string = getCellsTransitionDirection(e.key);
-
 			if (Events.includes(cellTransitionDirection)) {
-
 				const {isArrChanged, newArr, points, cellMerges, movedCells } = calculateNewCellsState(gameCells, cellTransitionDirection);
-
 				if (isArrChanged) {
 					setGameCells([...newArr])
 					settransitionDirection(cellTransitionDirection);
@@ -258,6 +242,17 @@ export default function GameField() {
 		}
 	}, [gameCells, pointsSound, moveSound, noChangeSound, score, cellMerges, movedCells, gameTime, volume, fieldSize])
 
+	const newGame = React.useCallback ( ()=> {
+		clickSound();
+		setgameStartTime(new Date().toISOString());
+		setisCellAppearance(true)
+		setscore(0);
+		setcellMerges(0);
+		setmovedCells(0);
+		setgameTime(0);
+		setgameStartTime(new Date().toISOString());
+		setGameCells(generateNewGame(fieldSize));
+	}, [fieldSize, clickSound])
 
 	React.useEffect(()=>{
 		window.addEventListener('keydown',keyDownHandler);
@@ -269,17 +264,16 @@ export default function GameField() {
 		return () =>  clearInterval(timeIncrementInterval);
 	},[gameStartTime])
 
-
-	const newGame = React.useCallback ( ()=> {
-		clickSound();
-		setisCellAppearance(true)
-		setscore(0);
-		setcellMerges(0);
-		setmovedCells(0);
-		setgameTime(0);
-		setgameStartTime(new Date().toISOString());
-		setGameCells(generateNewGame(fieldSize));
-	}, [fieldSize, clickSound])
+	React.useEffect(() => {
+		let interval: any;
+		if (isAutoplay) {
+			const getRandomKeyDownevent = ()=> {
+				return new KeyboardEvent('keydown', {key:['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'][getRandomNumber(4)]});
+			}
+			interval = setInterval(() => window.dispatchEvent(getRandomKeyDownevent()) , 1000);
+		}
+		return () =>  clearInterval(interval);
+	}, [isAutoplay])
 
 	function newGameHAndler() {
 		setisAutoplay(false);
@@ -319,17 +313,6 @@ export default function GameField() {
 	function fieldSizeSelecthandler(newFieldSize: number) {
 		setfieldSize(newFieldSize);
 	}
-
-	React.useEffect(() => {
-		let interval: any;
-		if (isAutoplay) {
-			const getRandomKeyDownevent = ()=> {
-				return new KeyboardEvent('keydown', {key:['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'][getRandomNumber(4)]});
-			}
-			interval = setInterval(() => window.dispatchEvent(getRandomKeyDownevent()) , 1000);
-		}
-		return () =>  clearInterval(interval);
-	}, [isAutoplay])
 
 	function autoplayHandler() {
 		newGame();
