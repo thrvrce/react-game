@@ -192,6 +192,9 @@ footer{
 
 .Volume {
 	width: 9rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
 	.controlButton {
 		width: 100%;

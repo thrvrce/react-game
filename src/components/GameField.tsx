@@ -268,7 +268,7 @@ export default function GameField() {
   const [noChangeSound] = useSound(noChange, {volume: efectsVolume});
 	const [looseSound] = useSound(loose, {volume: efectsVolume});
 	const [victorySound] = useSound(victory, {volume:efectsVolume});
-	const [musicSound, {isPlaying}] = useSound(music, {volume: musicVolume});
+	const [musicSound, {isPlaying, stop}] = useSound(music, {volume: musicVolume});
 
 	React.useEffect( ()=> {
 		if (isEffectVolumeMuted) {
@@ -338,7 +338,8 @@ export default function GameField() {
 
 	React.useEffect( () => {
 		musicSound();
-	}, [musicSound, isPlaying])
+		return () => {stop()};
+	}, [musicSound, isPlaying,stop])
 
   React.useEffect(()=>{
     window.addEventListener('keydown',keyDownHandler);
