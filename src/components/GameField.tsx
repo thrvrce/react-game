@@ -209,7 +209,7 @@ function saveGame (gameCells:gameCell[], score:number, cellMerges: number, moved
   localStorage.setItem(saved2048GamesLC, JSON.stringify(arrayOfSavedGames));
 }
 
-const getinitVolumeLevel = (type: string)=> {
+const getInitialState = (type: string)=> {
 	const arrayOfSavedGames = getSavedGames();
 	if (arrayOfSavedGames.length === 0) {
     switch(type){
@@ -238,37 +238,38 @@ const getinitVolumeLevel = (type: string)=> {
 function gameCellsHasValue(arr: gameCell[], value: number | null) {
 	return arr.findIndex( (cell) => cell.curValue === value ) !== -1;
 }
+
 export default function GameField() {
-  const [gameStartTime, setgameStartTime] = React.useState(getinitVolumeLevel('gameStartTime'))
-  const [score				, setscore] = React.useState(getinitVolumeLevel('score'));
-  const [cellMerges		, setcellMerges] = React.useState(getinitVolumeLevel('cellMerges'));
-  const [movedCells		, setmovedCells] = React.useState(getinitVolumeLevel('movedCells'));
-  const [gameTime			, setgameTime] = React.useState(getinitVolumeLevel('gameTime'));
-  const [fieldSize		, setfieldSize] = React.useState(getinitVolumeLevel('fieldSize'))
-  const [gameCells		, setGameCells] = React.useState(getinitVolumeLevel('gameCells'))
+  const [gameStartTime        , setgameStartTime        ] = React.useState(getInitialState('gameStartTime'))
+  const [score				        , setscore								] = React.useState(getInitialState('score'));
+  const [cellMerges		        , setcellMerges						] = React.useState(getInitialState('cellMerges'));
+  const [movedCells		        , setmovedCells						] = React.useState(getInitialState('movedCells'));
+  const [gameTime			        , setgameTime							] = React.useState(getInitialState('gameTime'));
+  const [fieldSize		        , setfieldSize						] = React.useState(getInitialState('fieldSize'))
+  const [gameCells		        , setGameCells						] = React.useState(getInitialState('gameCells'))
   const [fullScreenButtonValue, setfullScreenButtonValue] = React.useState<string>('Open in fullscreen');
-  let [isCellAppearance, setisCellAppearance] = React.useState(true);
-  let [transitionDirection, settransitionDirection] = React.useState('');
-	const [isAutoplay, setisAutoplay] = React.useState(false);
-	const [isShowMessage, setisShowMessage] = React.useState(false);
-	const [goal, setgoal] = React.useState(getinitVolumeLevel('goal'));
-	const [message, setmessage] = React.useState('');
-  let cancalculateCelsNewState = React.useRef(false);
-  let gameWStatAndCanvasWrapper = React.useRef<HTMLDivElement>(null);
+  const [isCellAppearance			, setisCellAppearance			] = React.useState(true);
+  const [transitionDirection	, settransitionDirection	] = React.useState('');
+	const [isAutoplay						, setisAutoplay						] = React.useState(false);
+	const [isShowMessage				, setisShowMessage				] = React.useState(false);
+	const [goal									, setgoal									] = React.useState(getInitialState('goal'));
+	const [message							, setmessage							] = React.useState('');
+	const [volume								, setVolume								] = React.useState(getInitialState('volume'))
+	const [efectsVolume					, setfectsVolume					] = React.useState(getInitialState('efectsVolume'))
+	const [musicVolume					, setmusicVolume					] = React.useState(getInitialState('musicVolume'))
+	const [isEffectVolumeMuted	, setisEffectVolumeMuted	] = React.useState(getInitialState('isEffectVolumeMuted'))
+	const [ismusicVolumeMuted		, setismusicVolumeMuted		] = React.useState(getInitialState('ismusicVolumeMuted'))
 
-
-  const [volume, setVolume] = React.useState(getinitVolumeLevel('volume'))
-	const [efectsVolume, setfectsVolume] = React.useState(getinitVolumeLevel('efectsVolume'))
-	const [musicVolume, setmusicVolume] = React.useState(getinitVolumeLevel('musicVolume'))
-	const [isEffectVolumeMuted, setisEffectVolumeMuted] = React.useState(getinitVolumeLevel('isEffectVolumeMuted'))//todo load
-	const [ismusicVolumeMuted, setismusicVolumeMuted] = React.useState(getinitVolumeLevel('ismusicVolumeMuted'))//todo load
-  const [pointsSound] = useSound(points, {volume: efectsVolume});
-  const [moveSound] = useSound(move, {volume: efectsVolume});
-  const [clickSound] = useSound(click, {volume: efectsVolume});
-  const [noChangeSound] = useSound(noChange, {volume: efectsVolume});
-	const [looseSound] = useSound(loose, {volume: efectsVolume});
-	const [victorySound] = useSound(victory, {volume:efectsVolume});
+	const [pointsSound									] = useSound(points, {volume: efectsVolume});
+  const [moveSound										] = useSound(move, {volume: efectsVolume});
+  const [clickSound										] = useSound(click, {volume: efectsVolume});
+  const [noChangeSound								] = useSound(noChange, {volume: efectsVolume});
+	const [looseSound										] = useSound(loose, {volume: efectsVolume});
+	const [victorySound									] = useSound(victory, {volume:efectsVolume});
 	const [musicSound, {isPlaying, stop}] = useSound(music, {volume: musicVolume});
+
+	const cancalculateCelsNewState  = React.useRef(false);
+  const gameWStatAndCanvasWrapper = React.useRef<HTMLDivElement>(null);
 
 	React.useEffect( ()=> {
 		if (isEffectVolumeMuted) {
