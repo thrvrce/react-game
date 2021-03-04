@@ -215,8 +215,9 @@ function getInitialState() {
 
   if (arrayOfSavedGames.length === 0) {
     gameCells = generateNewGame();
-    fieldSize = volume = gameTime = movedCells = cellMerges = score = 0 ;
+    volume = gameTime = movedCells = cellMerges = score = 0 ;
     gameStartTime = new Date().toISOString();
+		fieldSize = 4;
 		goal = 2048;
   } else {
     gameCells     = arrayOfSavedGames[0].gameCells
