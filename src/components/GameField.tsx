@@ -197,15 +197,25 @@ function getSavedGames() {
   return savedGame ? JSON.parse(savedGame) : [];
 }
 
-function saveGame (gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal: number, isEffectVolumeMuted:boolean, ismusicVolumeMuted: boolean, efectsVolume:number, musicVolume:number) {
-  const gameToSave = { gameCells, score, cellMerges, movedCells, gameTime,volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume};
+type savedGame = {
+	gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal: number, isEffectVolumeMuted:boolean, ismusicVolumeMuted: boolean, efectsVolume:number, musicVolume:number
+}
+function saveGame (gameToSave: savedGame) {
+  //const gameToSave = { gameCells, score, cellMerges, movedCells, gameTime,volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume};
   const arrayOfSavedGames = getSavedGames();
 
-  if (arrayOfSavedGames.length > 9) {
-    arrayOfSavedGames.pop();
-  }
-
-  arrayOfSavedGames.unshift(gameToSave);
+	if (arrayOfSavedGames.length > 0) {
+		const currentGameSavedIndex = arrayOfSavedGames.findIndex( (savedGame: savedGame) =>  savedGame.gameStartTime === gameToSave.gameStartTime);
+		// считается что текущая игра, если уже сохранена, может быть только нулевой в массиве, потому что загрузка осуществляется всегда с нулевого элемента
+		if (currentGameSavedIndex === -1 || currentGameSavedIndex !== 0) {
+			if (arrayOfSavedGames.length > 9) {
+				arrayOfSavedGames.pop();
+			}
+			arrayOfSavedGames.unshift(gameToSave);
+		} else {
+			arrayOfSavedGames[currentGameSavedIndex] = 	gameToSave;
+		}
+	}
   localStorage.setItem(saved2048GamesLC, JSON.stringify(arrayOfSavedGames));
 }
 
@@ -389,7 +399,7 @@ export default function GameField() {
       cell.path = 0;
       return cell;
     }));
-    saveGame (gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume) ;
+    saveGame ( {gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume}) ;
 		if(gameCellsHasValue(gameCells, Number(goal))) {
 			victorySound();
 			if (isAutoplay) {
