@@ -329,7 +329,9 @@ export default function GameField() {
           setisCellAppearance(true);
           noChangeSound();
         }
-      }
+      } else {
+				cancalculateCelsNewState.current = true;
+			}
     }
   }, [gameCells, pointsSound, moveSound, noChangeSound, looseSound])
 
