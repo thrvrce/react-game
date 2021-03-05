@@ -21,11 +21,11 @@ export default function SavedGamesStat(props: any) {
 				)
 			})
 		} else {
-			return <tr> <td colSpan={4}> No saved games! </td> </tr>;
+			return <tr> <td colSpan={5}> No saved games! </td> </tr>;
 		}
 	}
 	return (
-    <div className='savedGamesStat hiddenPAnel' style={{transform: props.isShowStatistics ? 'translate(0%, 225%)' : '', opacity: props.isShowStatistics ? '1' : '0'}}>
+    <div className='savedGamesStat hiddenPAnel' style={{transform: props.isShowStatistics ? 'translate(0rem, 50rem)' : '', opacity: props.isShowStatistics ? '1' : '0'}}>
 			<table>
 				<caption>Previous ten games statistic</caption>
 				<thead>
