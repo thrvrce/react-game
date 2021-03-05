@@ -316,6 +316,9 @@ export default function GameField() {
 						noChangeSound();
 						cancalculateCelsNewState.current = true;
 					} else {
+						if (isAutoplay) {
+							setisAutoplay(false)
+						}
 						setmessage('You loose (no available moves)');
 						setisShowMessage(true);
 						looseSound();
