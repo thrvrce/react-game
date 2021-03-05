@@ -77,7 +77,6 @@ function generateNewGame(fieldSize : number = 4): gameCell[]{
 
 function calculateNewCellsState(gameCellsToChange:gameCell[], direction: string) :{isArrChanged: boolean, newArr :gameCell[], points: number, cellMerges: number, movedCells: number}{
   const newArr:gameCell[] = JSON.parse(JSON.stringify(gameCellsToChange));
-	console.log(newArr === gameCellsToChange)
   let isArrChanged: boolean = false;
   let points: number = 0;
   let cellMerges : number = 0;
