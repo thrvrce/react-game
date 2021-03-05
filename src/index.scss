@@ -180,6 +180,7 @@ footer{
 			// background: #e0a064;
 			border-radius: $borderRadius;
 			padding: $stanadrtPadding;
+			text-align: center;
 
 			.settingControls{
 				display: flex;
@@ -187,8 +188,16 @@ footer{
 				align-items: baseline;
 			}
 		}
+
+
+	.GameParemetersWrapper {
+		display: flex;
+		justify-content: space-evenly;
+		border-radius: $borderRadius;
+	}
 	}
 }
+
 
 .Volume {
 	width: 9rem;

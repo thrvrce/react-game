@@ -7,7 +7,7 @@ import Message from './Message/Message'
 import useSound from 'use-sound';
 import SavedGamesStat from './SavedGamesStat/StatTable'
 import {gameCell} from '../Const/generallInterfaces'
-import {transitionUp,	transitionDown,	transitionLeft,	transitionRight, saved2048GamesLC, keyboardCeilsControlEvents} from '../Const/generalConsts'
+import {autoplayNewGame, transitionUp,	transitionDown,	transitionLeft,	transitionRight, saved2048GamesLC, keyboardCeilsControlEvents} from '../Const/generalConsts'
 
 import points from '../sounds/points.wav'
 import move from '../sounds/move.wav'
@@ -198,7 +198,7 @@ function getSavedGames() {
 }
 
 type savedGame = {
-	gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal: number, isEffectVolumeMuted:boolean, ismusicVolumeMuted: boolean, efectsVolume:number, musicVolume:number
+	gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal: number, isEffectVolumeMuted:boolean, ismusicVolumeMuted: boolean, efectsVolume:number, musicVolume:number, gameForAutoplay: string
 }
 function saveGame (gameToSave: savedGame) {
   const arrayOfSavedGames = getSavedGames();
@@ -236,6 +236,7 @@ const getInitialState = (type: string)=> {
 
 			case 'isEffectVolumeMuted':
 			case 	'ismusicVolumeMuted': return false;
+			case 'gameForAutoplay': return autoplayNewGame;
 		}
   } else {
     return  arrayOfSavedGames[0][type];
@@ -267,7 +268,7 @@ export default function GameField() {
 	const [isEffectVolumeMuted	, setisEffectVolumeMuted	] = React.useState(getInitialState('isEffectVolumeMuted'))
 	const [ismusicVolumeMuted		, setismusicVolumeMuted		] = React.useState(getInitialState('ismusicVolumeMuted'))
 	const [isShowStatistics			, setisShowStatistics			] = React.useState(false);
-
+	const [gameForAutoplay      , setgameForAutoplay      ] = React.useState(getInitialState('gameForAutoplay'));// todo from saved
 	const [pointsSound									] = useSound(points, {volume: efectsVolume});
   const [moveSound										] = useSound(move, {volume: efectsVolume});
   const [clickSound										] = useSound(click, {volume: efectsVolume});
@@ -402,7 +403,7 @@ export default function GameField() {
       cell.path = 0;
       return cell;
     }));
-    saveGame ( {gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume}) ;
+    saveGame ( {gameCells, score, cellMerges, movedCells, gameTime, volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume, gameForAutoplay}) ;
 		if(gameCellsHasValue(gameCells, Number(goal))) {
 			victorySound();
 			if (isAutoplay) {
@@ -430,7 +431,9 @@ export default function GameField() {
 
   function autoplayHandler() {
     if (!isAutoplay) {
-			newGame();
+			if (gameForAutoplay === autoplayNewGame) {
+				newGame();
+			}
 		}
     setisAutoplay(!isAutoplay);
   }
@@ -447,6 +450,11 @@ export default function GameField() {
 	function togleSavedGamesStatisticsVsibility() {
 		setisShowStatistics(!isShowStatistics)
 	}
+
+	function gameForAutoplayHandler(gameType: string) {
+		setgameForAutoplay(gameType);
+	}
+
   return (
     <div ref={gameWStatAndCanvasWrapper} className='GameField'>
       {/* <div ref={gameWStatAndCanvasWrapper} className='gameWStatAndCanvasWrapper'> */}
@@ -464,7 +472,9 @@ export default function GameField() {
 				isEffectVolumeMuted={isEffectVolumeMuted} setisEffectVolumeMuted={setisEffectVolumeMuted}
 				ismusicVolumeMuted={ismusicVolumeMuted} setismusicVolumeMuted={setismusicVolumeMuted}
 				fieldSize={fieldSize} fieldSizeSelecthandler={fieldSizeSelecthandler}
-				goal={goal} goalHandler={goalHandler}/>
+				goal={goal} goalHandler={goalHandler}
+				gameForAutoplay={gameForAutoplay} gameForAutoplayHandler={gameForAutoplayHandler}/>
+
       <ControlPanel
 				newGameHAndler={newGameHAndler}
 				toggleFullScreen={toggleFullScreen}

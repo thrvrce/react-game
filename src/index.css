@@ -309,6 +309,7 @@ footer div {
   border-radius: 6px;
   border-radius: 6px;
   padding: 0.5rem;
+  text-align: center;
 }
 
 .SettingsWrapper .Parameters .parameter .settingControls {
@@ -321,6 +322,16 @@ footer div {
   -webkit-box-align: baseline;
       -ms-flex-align: baseline;
           align-items: baseline;
+}
+
+.SettingsWrapper .Parameters .GameParemetersWrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  border-radius: 6px;
 }
 
 .Volume {

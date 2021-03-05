@@ -24,6 +24,9 @@ const lengthBetweenCells: number = 100 / 85 *100; // соотношение дл
 const saved2048GamesLC = 'saved2048Games';
 const keyboardCeilsControlEvents: string[] = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
 
+const autoplayNewGame = 'New game';
+const autoplayCurentGame = 'Current game';
+
 function insLeadZeroToTimer (timeNumber: number){
   return  (timeNumber < 10 ? "0" : "") + timeNumber.toString();
 }
@@ -59,6 +62,10 @@ export {
 	lengthBetweenCells,
 	saved2048GamesLC,
 	keyboardCeilsControlEvents,
+
+	autoplayNewGame,
+	autoplayCurentGame,
+
 
 	insLeadZeroToTimer,
 	getPrettyTimeFromSecondsOrMinutes,
