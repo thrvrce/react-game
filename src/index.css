@@ -41,7 +41,7 @@ code {
 
 .controlButton {
   color: white;
-  font-weight: bold;
+  font-weight: normal;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -203,7 +203,7 @@ code {
 
 .CurrentGameStatistics .Indicator {
   color: white;
-  font-weight: bold;
+  font-weight: normal;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -281,7 +281,7 @@ footer div {
 
 .SettingsWrapper .settingsPanelName {
   color: white;
-  font-weight: bold;
+  font-weight: normal;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -301,7 +301,7 @@ footer div {
 
 .SettingsWrapper .Parameters .parameter {
   color: white;
-  font-weight: bold;
+  font-weight: normal;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -378,7 +378,7 @@ footer div {
           flex-direction: row;
 }
 
-.Message {
+.hiddenPAnel {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -397,24 +397,46 @@ footer div {
       -ms-flex-direction: column;
           flex-direction: column;
   position: absolute;
-  top: -6rem;
   border: 2px solid white;
   width: 28rem;
   z-index: 100;
-  -webkit-transition: -webkit-transform 1s;
-  transition: -webkit-transform 1s;
-  transition: transform 1s;
-  transition: transform 1s, -webkit-transform 1s;
+  -webkit-transition: opacity 1s, -webkit-transform 1s;
+  transition: opacity 1s, -webkit-transform 1s;
+  transition: transform 1s, opacity 1s;
+  transition: transform 1s, opacity 1s, -webkit-transform 1s;
+}
+
+.Message {
+  top: -6rem;
 }
 
 .Message .MessageTitle {
   color: white;
-  font-weight: bold;
+  font-weight: normal;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
   text-align: center;
+}
+
+.savedGamesStat {
+  top: -25rem;
+}
+
+table, tr, td, thead {
+  border: 2px solid white;
+  color: white;
+  font-weight: normal;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  text-align: center;
+}
+
+tbody > tr:hover {
+  background: #f77c5f;
 }
 
 @-webkit-keyframes gamefieldLoad {

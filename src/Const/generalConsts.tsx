@@ -28,6 +28,10 @@ function insLeadZeroToTimer (timeNumber: number){
   return  (timeNumber < 10 ? "0" : "") + timeNumber.toString();
 }
 
+function getPrettyTimeFromSecondsOrMinutes (seconds: number):string {
+	return `${insLeadZeroToTimer(Math.floor(seconds / 60))}:${insLeadZeroToTimer(seconds % 60 || 0 )}`
+}
+
 export {
 
 
@@ -57,4 +61,5 @@ export {
 	keyboardCeilsControlEvents,
 
 	insLeadZeroToTimer,
+	getPrettyTimeFromSecondsOrMinutes,
 }

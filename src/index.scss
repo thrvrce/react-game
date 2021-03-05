@@ -29,7 +29,7 @@ $standartWhiteBorder: 2px solid white;
 
 @mixin standartText {
 	color: white;
-	font-weight: bold;
+	font-weight: normal;
 	user-select: none;
 }
 
@@ -216,23 +216,38 @@ footer{
 	flex-direction:  row;
 }
 
-.Message {
+.hiddenPAnel {
 	@include standartGamePanel;
 	flex-direction: column;
 	position: absolute;
-	top: -6rem;
 	border: $standartWhiteBorder;
 	width: 28rem;
 	z-index: 100;
 	// transform: translate(0%, -150%);
 	// transform: translate(0%, 750%);
-	transition: transform 1s;
+	transition: transform 1s, opacity 1s;
+}
 
-
+.Message {
+	top: -6rem;
 	.MessageTitle{
 		@include standartText;
 		text-align: center;
 	}
+}
+
+.savedGamesStat{
+	top: -25rem;
+	// transform: translate(0%, 350%);
+}
+
+table, tr, td, thead{
+	border: 2px solid white;
+	@include standartText;
+		text-align: center;
+}
+tbody>tr:hover{
+	background: rgb(247, 124, 95);
 }
 
 @keyframes gamefieldLoad {

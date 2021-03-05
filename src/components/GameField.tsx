@@ -5,7 +5,7 @@ import GameCanvas from './GameCanvas/GameCanvas'
 import SettingsPanel from './SettingsPanel/SettingsPanel'
 import Message from './Message/Message'
 import useSound from 'use-sound';
-
+import SavedGamesStat from './SavedGamesStat/StatTable'
 import {gameCell} from '../Const/generallInterfaces'
 import {transitionUp,	transitionDown,	transitionLeft,	transitionRight, saved2048GamesLC, keyboardCeilsControlEvents} from '../Const/generalConsts'
 
@@ -201,21 +201,18 @@ type savedGame = {
 	gameCells:gameCell[], score:number, cellMerges: number, movedCells:number, gameTime:number, volume:number, fieldSize: number, gameStartTime: string, goal: number, isEffectVolumeMuted:boolean, ismusicVolumeMuted: boolean, efectsVolume:number, musicVolume:number
 }
 function saveGame (gameToSave: savedGame) {
-  //const gameToSave = { gameCells, score, cellMerges, movedCells, gameTime,volume, fieldSize, gameStartTime, goal, isEffectVolumeMuted, ismusicVolumeMuted, efectsVolume, musicVolume};
   const arrayOfSavedGames = getSavedGames();
+	const currentGameSavedIndex = arrayOfSavedGames.findIndex( (savedGame: savedGame) =>  savedGame.gameStartTime === gameToSave.gameStartTime);
 
-	if (arrayOfSavedGames.length > 0) {
-		const currentGameSavedIndex = arrayOfSavedGames.findIndex( (savedGame: savedGame) =>  savedGame.gameStartTime === gameToSave.gameStartTime);
-		// считается что текущая игра, если уже сохранена, может быть только нулевой в массиве, потому что загрузка осуществляется всегда с нулевого элемента
-		if (currentGameSavedIndex === -1 || currentGameSavedIndex !== 0) {
-			if (arrayOfSavedGames.length > 9) {
-				arrayOfSavedGames.pop();
-			}
-			arrayOfSavedGames.unshift(gameToSave);
-		} else {
-			arrayOfSavedGames[currentGameSavedIndex] = 	gameToSave;
+	if (currentGameSavedIndex !== -1 && currentGameSavedIndex === 0) {
+		arrayOfSavedGames[currentGameSavedIndex] = 	gameToSave;
+	} else {
+		if (arrayOfSavedGames.length > 9) {
+			arrayOfSavedGames.pop();
 		}
+		arrayOfSavedGames.unshift(gameToSave);
 	}
+
   localStorage.setItem(saved2048GamesLC, JSON.stringify(arrayOfSavedGames));
 }
 
@@ -269,6 +266,7 @@ export default function GameField() {
 	const [musicVolume					, setmusicVolume					] = React.useState(getInitialState('musicVolume'))
 	const [isEffectVolumeMuted	, setisEffectVolumeMuted	] = React.useState(getInitialState('isEffectVolumeMuted'))
 	const [ismusicVolumeMuted		, setismusicVolumeMuted		] = React.useState(getInitialState('ismusicVolumeMuted'))
+	const [isShowStatistics			, setisShowStatistics			] = React.useState(false);
 
 	const [pointsSound									] = useSound(points, {volume: efectsVolume});
   const [moveSound										] = useSound(move, {volume: efectsVolume});
@@ -440,31 +438,45 @@ export default function GameField() {
 	function goalHandler(newGoal: number) {
 		setgoal(newGoal);
 	}
+
+	function togleSavedGamesStatisticsVsibility() {
+		setisShowStatistics(!isShowStatistics)
+	}
   return (
     <div ref={gameWStatAndCanvasWrapper} className='GameField'>
       {/* <div ref={gameWStatAndCanvasWrapper} className='gameWStatAndCanvasWrapper'> */}
-      <Message isShowMessage={isShowMessage} message={message} messageOkHandler={messageOkHandler}/>
+      <Message
+				isShowMessage={isShowMessage}
+				message={message}
+				messageOkHandler={messageOkHandler}/>
+			<SavedGamesStat
+				getSavedGames={getSavedGames}
+				isShowStatistics={isShowStatistics}
+				/>
 			<SettingsPanel
-			volume={volume} setVolume={setVolume}
-			musicVolume={musicVolume} setmusicVolume={setmusicVolume}
-			isEffectVolumeMuted={isEffectVolumeMuted} setisEffectVolumeMuted={setisEffectVolumeMuted}
-			ismusicVolumeMuted={ismusicVolumeMuted} setismusicVolumeMuted={setismusicVolumeMuted}
-			fieldSize={fieldSize} fieldSizeSelecthandler={fieldSizeSelecthandler}
-			goal={goal} goalHandler={goalHandler}/>
-      <ControlPanel newGameHAndler={newGameHAndler} toggleFullScreen={toggleFullScreen} fullScreenButtonValue={fullScreenButtonValue} autoplayHandler={autoplayHandler}/>
-        <CurrentGameStatistics
-          score={score}
-          cellMerges={cellMerges}
-          movedCells={movedCells}
-          gameTime={gameTime}
-        />
-        <GameCanvas
-          gameCells={gameCells}
-          isCellAppearance={isCellAppearance}
-          transitionDirection={transitionDirection}
-          cellAnimationEndHandler={cellAnimationEndHandler}
-          cellTransitionEndHandler={cellTransitionEndHandler}
-        />
+				volume={volume} setVolume={setVolume}
+				musicVolume={musicVolume} setmusicVolume={setmusicVolume}
+				isEffectVolumeMuted={isEffectVolumeMuted} setisEffectVolumeMuted={setisEffectVolumeMuted}
+				ismusicVolumeMuted={ismusicVolumeMuted} setismusicVolumeMuted={setismusicVolumeMuted}
+				fieldSize={fieldSize} fieldSizeSelecthandler={fieldSizeSelecthandler}
+				goal={goal} goalHandler={goalHandler}/>
+      <ControlPanel
+				newGameHAndler={newGameHAndler}
+				toggleFullScreen={toggleFullScreen}
+				fullScreenButtonValue={fullScreenButtonValue}
+				autoplayHandler={autoplayHandler}
+				togleSavedGamesStatisticsVsibility={togleSavedGamesStatisticsVsibility}/>
+			<CurrentGameStatistics
+				score={score}
+				cellMerges={cellMerges}
+				movedCells={movedCells}
+				gameTime={gameTime}/>
+			<GameCanvas
+				gameCells={gameCells}
+				isCellAppearance={isCellAppearance}
+				transitionDirection={transitionDirection}
+				cellAnimationEndHandler={cellAnimationEndHandler}
+				cellTransitionEndHandler={cellTransitionEndHandler}/>
       {/* </div> */}
 
     </div>
