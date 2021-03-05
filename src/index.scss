@@ -1,0 +1,265 @@
+$standartCellSize: 30rem;
+$borderRadius: 6px;
+$stanadrtPadding: 0.5rem;
+$standartWhiteBorder: 2px solid white;
+
+@mixin flexCentered{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@mixin commonCellStyle($sideLenth) {
+	@include flexCentered;
+	width: $sideLenth;
+	height: $sideLenth;
+	border-radius: $borderRadius;
+}
+
+@mixin standartGamePanel {
+	display: flex;
+	border-radius: $borderRadius;
+	background: #bbada0;
+	margin-top: 1rem;
+	width: $standartCellSize;
+	flex-wrap: wrap;
+	padding: $stanadrtPadding;
+	justify-content: space-evenly;
+}
+
+@mixin standartText {
+	color: white;
+	font-weight: normal;
+	user-select: none;
+}
+
+*{
+	box-sizing: border-box;
+}
+html{
+	font-size: 13px;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+	font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+	background: aliceblue;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+#root{
+	display: flex;
+	justify-content: center;
+}
+
+.controlButton:focus,
+.controlButton:active,
+.controlButton
+{
+	border: none;
+	outline: none;
+}
+
+.controlButton:hover{
+	cursor: pointer;
+	opacity: 0.7;
+}
+
+.controlButton{
+	@include standartText;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	padding: $stanadrtPadding;
+	background: #8f7a66;
+	border-radius: $borderRadius;
+	border: none;
+}
+
+.mainContent{
+	background: antiquewhite;
+	border-radius: $borderRadius;
+	animation-name: gamefieldLoad;
+  animation-duration: 1s;
+}
+
+.GameCanvas{
+	display: flex;
+	flex-flow: row wrap;
+	width: $standartCellSize;
+  height: $standartCellSize;
+	background-color: #bbada0;
+	border-radius: $borderRadius;
+	margin-top: 1rem;
+	&-CellWrapper{
+		@include flexCentered;
+	}
+
+	&-CellBackground{
+		@include commonCellStyle(85%);
+		background-color: rgba(238, 228, 218, 0.35);
+	}
+
+	&-Cell{
+		@include commonCellStyle(100%);
+		font-weight: bold;
+		font-size: 2rem;
+		user-select: none;
+	}
+
+	@keyframes insertNewCells {
+		0%   { transform:   scale(0.3); }
+		25%  { transform:  scale(0.7); }
+		50%  { transform:  scale(1); }
+		75%  { transform:  scale(1.2); }
+		100% {transform: scale(1); }
+	}
+}
+
+.CurrentGameStatistics{
+	@include standartGamePanel;
+	flex-direction:  row;
+
+	.Indicator{
+		@include standartText;
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: center;
+		background: #bbada0;
+		border-radius: $borderRadius;
+		opacity: 0.8;
+	}
+}
+
+footer{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	background: rgb(243, 178, 122);
+	margin-top: 1rem;
+	border-radius: $borderRadius;
+
+	a{
+		text-decoration: none;
+	}
+
+	img{
+		width: 40px;
+		height: 40px;
+	 }
+
+	 div{
+		display: flex;
+		align-items: center;
+		align-self: center;
+		color: rgb(119, 110, 101);
+		font-weight: bold;
+	}
+}
+.SettingsWrapper{
+	@include standartGamePanel;
+	flex-direction: column;
+
+	.settingsPanelName{
+		@include standartText;
+	}
+
+	.Parameters{
+		display: flex;
+		justify-content: space-evenly;
+		border: $standartWhiteBorder;
+		border-radius: $borderRadius;
+
+		.parameter{
+			@include standartText;
+			border-radius: $borderRadius;
+			// background: #e0a064;
+			border-radius: $borderRadius;
+			padding: $stanadrtPadding;
+			text-align: center;
+
+			.settingControls{
+				display: flex;
+				justify-content: space-evenly;
+				align-items: baseline;
+			}
+		}
+
+
+	.GameParemetersWrapper {
+		display: flex;
+		justify-content: space-evenly;
+		border-radius: $borderRadius;
+	}
+	}
+}
+
+
+.Volume {
+	width: 9rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.controlButton {
+		width: 100%;
+		margin: 0.3rem;
+	}
+}
+
+.GameField{
+	display: flex;
+	flex-flow: column wrap;
+	align-items: center;
+	overflow: hidden;
+	border-radius: $borderRadius;
+	background: antiquewhite;
+}
+
+.ControlPanel{
+	@include standartGamePanel;
+	flex-direction:  row;
+}
+
+.hiddenPAnel {
+	@include standartGamePanel;
+	flex-direction: column;
+	position: absolute;
+	border: $standartWhiteBorder;
+	width: 28rem;
+	// z-index: 100;
+	// transform: translate(0%, -150%);
+	// transform: translate(0%, 750%);
+	transition: transform 1s, opacity 1s, z-index 1s;
+}
+
+.Message {
+	top: -6rem;
+	.MessageTitle{
+		@include standartText;
+		text-align: center;
+	}
+}
+
+.savedGamesStat{
+	top: -25rem;
+	// transform: translate(0%, 350%);
+}
+
+table, tr, td, thead{
+	border: 2px solid white;
+	@include standartText;
+		text-align: center;
+}
+tbody>tr:hover{
+	background: rgb(247, 124, 95);
+}
+
+@keyframes gamefieldLoad {
+	from{ transform: scale(0)}
+	to{transform: scale(1)}
+}
