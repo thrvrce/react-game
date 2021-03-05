@@ -231,10 +231,10 @@ footer{
 	position: absolute;
 	border: $standartWhiteBorder;
 	width: 28rem;
-	z-index: 100;
+	// z-index: 100;
 	// transform: translate(0%, -150%);
 	// transform: translate(0%, 750%);
-	transition: transform 1s, opacity 1s;
+	transition: transform 1s, opacity 1s, z-index 1s;
 }
 
 .Message {

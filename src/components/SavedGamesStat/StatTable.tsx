@@ -25,7 +25,7 @@ export default function SavedGamesStat(props: any) {
 		}
 	}
 	return (
-    <div className='savedGamesStat hiddenPAnel' style={{transform: props.isShowStatistics ? 'translate(0rem, 50rem)' : '', opacity: props.isShowStatistics ? '1' : '0'}}>
+    <div className='savedGamesStat hiddenPAnel' style={{transform: props.isShowStatistics ? 'translate(0rem, 50rem)' : '', opacity: props.isShowStatistics ? '1' : '0', zIndex: props.isShowStatistics ? 100 : -1}}>
 			<table>
 				<caption>Previous ten games statistic</caption>
 				<thead>
