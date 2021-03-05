@@ -333,7 +333,7 @@ export default function GameField() {
 				cancalculateCelsNewState.current = true;
 			}
     }
-  }, [gameCells, pointsSound, moveSound, noChangeSound, looseSound])
+  }, [gameCells, pointsSound, moveSound, noChangeSound, looseSound, isAutoplay])
 
   const newGame = React.useCallback ( ()=> {
     clickSound();
